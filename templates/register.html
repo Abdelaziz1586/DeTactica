@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>إنشاء حساب — DeTactica</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .auth-contact-box {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e5e5;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .auth-contact-box strong {
+            color: #003c32;
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .auth-contact-box a {
+            color: #66736f;
+            text-decoration: none;
+            direction: ltr;
+        }
+
+        .auth-contact-box a:hover {
+            color: #ff6b45;
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+
+<div class="auth-layout">
+
+    <section class="auth-content">
+
+        <a href="/"
+           class="auth-logo">
+
+            <span class="auth-logo-icon">
+                D
+            </span>
+
+            <span>
+                DeTactica
+            </span>
+
+        </a>
+
+        <div class="auth-card">
+
+            <div class="auth-heading">
+
+                <span>
+                    ابدأ رحلتك التدريبية
+                </span>
+
+                <h1>
+                    إنشاء حساب جديد
+                </h1>
+
+                <p>
+                    أنشئ حسابك وابدأ في تنظيم التمارين والحصص والفرق.
+                </p>
+
+            </div>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                        <div class="auth-alert {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form method="POST"
+                  class="auth-form">
+
+
+                <!-- الاسم بالكامل -->
+                <div class="auth-field">
+
+                    <label for="full_name">
+                        الاسم بالكامل
+                    </label>
+
+                    <input
+                        id="full_name"
+                        name="full_name"
+                        type="text"
+                        placeholder="مثال: أحمد محمد"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- رقم الموبايل -->
+                <div class="auth-field">
+
+                    <label for="phone">
+                        رقم الموبايل
+                    </label>
+
+                    <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        inputmode="numeric"
+                        placeholder="مثال: 01012345678"
+                        pattern="01[0-2,5][0-9]{8}"
+                        maxlength="11"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- البريد الإلكتروني -->
+                <div class="auth-field">
+
+                    <label for="email">
+                        البريد الإلكتروني
+                    </label>
+
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="coach@example.com"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- كلمة المرور -->
+                <div class="auth-field">
+
+                    <label for="password">
+                        كلمة المرور
+                    </label>
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="8 أحرف على الأقل"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- زر إنشاء الحساب -->
+                <button
+                    class="btn btn-primary auth-submit"
+                    type="submit">
+
+                    إنشاء الحساب
+
+                </button>
+
+            </form>
+
+
+            <!-- تسجيل الدخول -->
+            <div class="auth-footer-text">
+
+                لديك حساب بالفعل؟
+
+                <a href="{{ url_for('login') }}">
+                    تسجيل الدخول
+                </a>
+
+            </div>
+
+
+            <!-- بيانات التواصل -->
+            <div class="auth-contact-box">
+
+                <strong>
+                    تحتاج مساعدة؟ تواصل معنا
+                </strong>
+
+                <a href="tel:01055856727">
+                    📞 01055856727
+                </a>
+
+                <a href="mailto:deetactica@gmail.com">
+                    ✉️ deetactica@gmail.com
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="auth-visual">
+
+        <div class="auth-visual-content">
+
+            <span class="auth-badge">
+                منصة المدرب الذكية
+            </span>
+
+            <h2>
+                خطّط حصصك،
+                <br>
+                وطوّر فريقك
+
+                <span>
+                    باحترافية
+                </span>
+            </h2>
+
+            <p>
+                مكتبة تمارين كرة قدم، فيديوهات، لوحة تكتيكية،
+                فرق ولاعبون، وتقارير في منصة واحدة.
+            </p>
+
+
+            <div class="auth-benefits">
+
+                <div>
+                    <span>✓</span>
+                    حساب آمن ومحمي
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    حفظ التمارين والحصص
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    وصول من أي جهاز
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+    window.DETACTICA_LANGUAGE = {{ current_language|tojson }};
+</script>
+
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

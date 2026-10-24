@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ exercise.title }} | DeTactica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f3f7f5;
+            color: #082d24;
+            font-family: "Tajawal", Arial, sans-serif;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: #063c2f;
+            padding: 18px 0;
+        }
+
+        .nav-container {
+            width: min(1100px, 92%);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 27px;
+            font-weight: 900;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #ff7043;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        .brand-name span {
+            color: #ff7043;
+        }
+
+        .back-btn {
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.12);
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .back-btn:hover {
+            background: #ff7043;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page {
+            width: min(1000px, 92%);
+            margin: auto;
+            padding: 45px 0 80px;
+        }
+
+        /* =========================
+           MAIN CARD
+        ========================= */
+
+        .exercise-card {
+            overflow: hidden;
+            border-radius: 25px;
+            background: white;
+            box-shadow: 0 15px 45px rgba(0,0,0,.09);
+        }
+
+        .exercise-header {
+            padding: 38px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #07523f,
+                    #032c22
+                );
+            color: white;
+        }
+
+        .category {
+            display: inline-block;
+            padding: 7px 13px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,.13);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .exercise-header h1 {
+            margin: 0 0 12px;
+            font-size: 38px;
+        }
+
+        .exercise-header p {
+            max-width: 750px;
+            margin: 0;
+            color: #d3e4de;
+            font-size: 17px;
+            line-height: 1.9;
+        }
+
+        /* =========================
+           INFO
+        ========================= */
+
+        .exercise-body {
+            padding: 32px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 13px;
+            margin-bottom: 32px;
+        }
+
+        .info-card {
+            padding: 17px 10px;
+            border-radius: 13px;
+            background: #f2f7f5;
+            text-align: center;
+        }
+
+        .info-icon {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 24px;
+        }
+
+        .info-card small {
+            display: block;
+            margin-bottom: 5px;
+            color: #7b8984;
+            font-size: 12px;
+        }
+
+        .info-card strong {
+            font-size: 14px;
+        }
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            margin: 0 0 13px;
+            font-size: 21px;
+        }
+
+        .section p {
+            margin: 0;
+            color: #53665f;
+            font-size: 16px;
+            line-height: 2;
+            white-space: pre-line;
+        }
+
+        /* =========================
+           EQUIPMENT
+        ========================= */
+
+        .equipment-box {
+            padding: 18px;
+            border-radius: 14px;
+            background: #f5f7f6;
+            color: #435851;
+            line-height: 1.9;
+        }
+
+        /* =========================
+           VIDEO
+        ========================= */
+
+        .video-button {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: #edf3f1;
+            color: #082d24;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .video-button:hover {
+            background: #dfeae6;
+        }
+
+        /* =========================
+           BOARD CTA
+        ========================= */
+
+        .board-section {
+            padding: 25px;
+            margin-top: 35px;
+            border-radius: 18px;
+            background: #eef7f3;
+            text-align: center;
+        }
+
+        .board-section .icon {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 40px;
+        }
+
+        .board-section h2 {
+            margin: 0 0 8px;
+            font-size: 23px;
+        }
+
+        .board-section p {
+            max-width: 620px;
+            margin: 0 auto 20px;
+            color: #60726b;
+            line-height: 1.8;
+        }
+
+        .board-button {
+            display: inline-block;
+            min-width: 250px;
+            padding: 14px 25px;
+            border-radius: 12px;
+            background: #07523f;
+            color: white;
+            text-decoration: none;
+            font-weight: 900;
+            transition: .2s;
+        }
+
+        .board-button:hover {
+            background: #ff7043;
+            transform: translateY(-2px);
+        }
+
+        /* =========================
+           TAGS
+        ========================= */
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #edf4f1;
+            color: #486158;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 750px) {
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .exercise-header {
+                padding: 28px 22px;
+            }
+
+            .exercise-header h1 {
+                font-size: 30px;
+            }
+
+            .exercise-body {
+                padding: 23px;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            .back-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="{{ url_for('home') }}"
+           class="brand">
+
+            <span class="brand-icon">
+                D
+            </span>
+
+            <span class="brand-name notranslate" translate="no">
+                De<span>Tactica</span>
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('exercises_library') }}"
+           class="back-btn">
+
+            ← العودة لمكتبة التمارين
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<main class="page">
+
+
+    <article class="exercise-card">
+
+
+        <!-- HEADER -->
+
+        <header class="exercise-header">
+
+            {% if exercise.category %}
+
+                <span class="category">
+                    {{ exercise.category }}
+                </span>
+
+            {% endif %}
+
+
+            <h1>
+                {{ exercise.title }}
+            </h1>
+
+
+            <p>
+                {{ exercise.description }}
+            </p>
+
+        </header>
+
+
+
+        <div class="exercise-body">
+
+
+            <!-- TAGS -->
+
+            <div class="tags">
+
+                {% if exercise.goal %}
+
+                    <span class="tag">
+                        🎯 {{ exercise.goal }}
+                    </span>
+
+                {% endif %}
+
+
+                {% if exercise.age_group %}
+
+                    <span class="tag">
+                        👥 {{ exercise.age_group }}
+                    </span>
+
+                {% endif %}
+
+
+                {% if exercise.level %}
+
+                    <span class="tag">
+                        ⭐ {{ exercise.level }}
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- INFO -->
+
+            <section class="info-grid">
+
+
+                <div class="info-card">
+
+                    <span class="info-icon">
+                        👥
+                    </span>
+
+                    <small>
+                        عدد اللاعبين
+                    </small>
+
+                    <strong>
+                        {{ exercise.players_count or "غير محدد" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <span class="info-icon">
+                        ⏱️
+                    </span>
+
+                    <small>
+                        مدة التمرين
+                    </small>
+
+                    <strong>
+
+                        {% if exercise.duration_minutes %}
+
+                            {{ exercise.duration_minutes }}
+                            دقيقة
+
+                        {% else %}
+
+                            غير محدد
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <span class="info-icon">
+                        🎯
+                    </span>
+
+                    <small>
+                        الهدف
+                    </small>
+
+                    <strong>
+                        {{ exercise.goal or "عام" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <span class="info-icon">
+                        ⭐
+                    </span>
+
+                    <small>
+                        المستوى
+                    </small>
+
+                    <strong>
+                        {{ exercise.level or "عام" }}
+                    </strong>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <section class="section">
+
+                <h2>
+                    📋 شرح التمرين
+                </h2>
+
+                <p>
+                    {{ exercise.description }}
+                </p>
+
+            </section>
+
+
+
+            <!-- EQUIPMENT -->
+
+            <section class="section">
+
+                <h2>
+                    🧰 الأدوات المطلوبة
+                </h2>
+
+
+                <div class="equipment-box">
+
+                    {% if exercise.equipment %}
+
+                        {{ exercise.equipment }}
+
+                    {% else %}
+
+                        لا توجد أدوات محددة لهذا التمرين.
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- VIDEO -->
+
+            {% if exercise.video_url %}
+
+                <section class="section">
+
+                    <h2>
+                        🎥 فيديو توضيحي
+                    </h2>
+
+
+                    <a href="{{ exercise.video_url }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="video-button">
+
+                        ▶ مشاهدة فيديو التمرين
+
+                    </a>
+
+                </section>
+
+            {% endif %}
+
+
+
+            <!-- BOARD -->
+
+            <section class="board-section">
+
+                <span class="icon">
+                    🟩
+                </span>
+
+                <h2>
+                    جرّب التمرين على اللوحة
+                </h2>
+
+                <p>
+                    افتح التمرين على اللوحة التكتيكية
+                    لتعديل اللاعبين والكرات والأقماع والحواجز
+                    وتجربة التحركات قبل تنفيذ التمرين في الملعب.
+                </p>
+
+
+                <a href="{{ url_for('exercise_board', exercise_id=exercise.id) }}"
+                   class="board-button">
+
+                    فتح الإعداد على اللوحة
+
+                </a>
+
+            </section>
+
+
+        </div>
+
+
+    </article>
+
+
+</main>
+
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>مكتبة اللوحات | DeTactica</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #031f18;
+            color: white;
+            font-family: "Tajawal", Arial, sans-serif;
+        }
+
+        button,
+        a {
+            font-family: inherit;
+        }
+
+        .page {
+            width: min(1200px, 92%);
+            margin: auto;
+            padding: 30px 0 70px;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 27px;
+            font-weight: 900;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid #ff7043;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        .brand-name span {
+            color: #ff7043;
+        }
+
+        .back-button {
+            padding: 12px 20px;
+            border-radius: 12px;
+            background: #ff7043;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .page-header {
+            margin-bottom: 35px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 25px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(8, 89, 66, 0.96),
+                    rgba(4, 48, 37, 0.96)
+                );
+        }
+
+        .page-header h1 {
+            margin: 0 0 12px;
+            font-size: 42px;
+        }
+
+        .page-header p {
+            max-width: 750px;
+            margin: 0;
+            color: #c9ddd6;
+            font-size: 18px;
+            line-height: 1.9;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 7px;
+            font-size: 28px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #b8d3ca;
+        }
+
+        .boards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .board-card {
+            overflow: hidden;
+            border: 3px solid #ff7043;
+            border-radius: 22px;
+            background: white;
+            color: #082d24;
+            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.2);
+            transition:
+                transform 0.25s,
+                box-shadow 0.25s;
+        }
+
+        .board-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
+        }
+
+        .board-preview {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 49.5%,
+                    rgba(255, 255, 255, 0.75) 49.5%,
+                    rgba(255, 255, 255, 0.75) 50.5%,
+                    transparent 50.5%
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    #126246 0,
+                    #126246 55px,
+                    #176d4e 55px,
+                    #176d4e 110px
+                );
+        }
+
+        .board-preview::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.75);
+        }
+
+        .board-preview::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 65px;
+            height: 65px;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            border-radius: 50%;
+        }
+
+        .preview-player {
+            position: absolute;
+            z-index: 2;
+            width: 19px;
+            height: 19px;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            border-radius: 50%;
+            background: #ff7043;
+        }
+
+        .preview-player.blue {
+            background: #2878d0;
+        }
+
+        .preview-player.red {
+            background: #d63e3e;
+        }
+
+        .preview-player.goalkeeper {
+            background: #56c06f;
+        }
+
+        .preview-cone {
+            position: absolute;
+            z-index: 2;
+            width: 0;
+            height: 0;
+            transform: translate(-50%, -50%);
+            border-right: 8px solid transparent;
+            border-left: 8px solid transparent;
+            border-bottom: 20px solid #ffd21c;
+        }
+
+        .preview-cone.red {
+            border-bottom-color: #ef3838;
+        }
+
+        .card-content {
+            padding: 23px;
+        }
+
+        .card-label {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: #fff0eb;
+            color: #e5532f;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .board-card h3 {
+            margin: 0 0 9px;
+            font-size: 25px;
+        }
+
+        .board-card p {
+            min-height: 52px;
+            margin: 0 0 20px;
+            color: #66736f;
+            line-height: 1.7;
+        }
+
+        .open-button {
+            display: inline-block;
+            padding: 11px 19px;
+            border: none;
+            border-radius: 11px;
+            background: #ff7043;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .saved-card {
+            border-color: #159471;
+        }
+
+        .saved-card .open-button {
+            background: #159471;
+        }
+
+        .saved-card .card-label {
+            background: #e5f7f1;
+            color: #08795b;
+        }
+
+        .saved-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .delete-saved-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 11px;
+            background: #f1e7e7;
+            color: #b52f2f;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .empty-saved {
+            grid-column: 1 / -1;
+            padding: 35px;
+            border: 2px dashed rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            color: #b8d3ca;
+            text-align: center;
+        }
+
+        @media (max-width: 750px) {
+            .boards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back-button {
+                text-align: center;
+            }
+
+            .page-header {
+                padding: 27px;
+            }
+
+            .page-header h1 {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="top-bar">
+
+        <a href="{{ url_for('home') }}"
+           class="brand">
+
+            <span class="brand-icon">D</span>
+
+            <span class="brand-name">
+                DeTactica
+            </span>
+
+        </a>
+
+        <a href="{{ url_for('sport_details', slug='football') }}"
+           class="back-button">
+
+            العودة لكرة القدم
+
+        </a>
+
+    </div>
+
+
+    <section class="page-header">
+
+        <h1>مكتبة اللوحات الجاهزة</h1>
+
+        <p>
+            اختار تشكيلًا أو تمرينًا جاهزًا، ثم عدّل العناصر
+            داخل اللوحة التكتيكية. وستظهر هنا أيضًا أي لوحة
+            تحفظها من داخل اللوحة.
+        </p>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <h2>لوحات DeTactica</h2>
+
+            <p>
+                أربع لوحات جاهزة كبداية.
+            </p>
+
+        </div>
+
+
+        <div class="boards-grid">
+
+            <article class="board-card">
+
+                <div class="board-preview">
+
+                    <span class="preview-player goalkeeper"
+                          style="left:10%; top:50%;"></span>
+
+                    <span class="preview-player"
+                          style="left:25%; top:18%;"></span>
+
+                    <span class="preview-player"
+                          style="left:25%; top:39%;"></span>
+
+                    <span class="preview-player"
+                          style="left:25%; top:61%;"></span>
+
+                    <span class="preview-player"
+                          style="left:25%; top:82%;"></span>
+
+                    <span class="preview-player"
+                          style="left:48%; top:25%;"></span>
+
+                    <span class="preview-player"
+                          style="left:43%; top:50%;"></span>
+
+                    <span class="preview-player"
+                          style="left:48%; top:75%;"></span>
+
+                    <span class="preview-player"
+                          style="left:76%; top:18%;"></span>
+
+                    <span class="preview-player"
+                          style="left:82%; top:50%;"></span>
+
+                    <span class="preview-player"
+                          style="left:76%; top:82%;"></span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-label">
+                        تشكيل
+                    </span>
+
+                    <h3>تشكيل 4-3-3</h3>
+
+                    <p>
+                        تشكيل هجومي بثلاثة لاعبين في خط الهجوم.
+                    </p>
+
+                    <a class="open-button"
+                       href="{{ url_for('tactical_board') }}?template=formation-433">
+
+                        فتح على اللوحة
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="board-card">
+
+                <div class="board-preview">
+
+                    <span class="preview-player goalkeeper"
+                          style="left:10%; top:50%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:25%; top:18%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:25%; top:39%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:25%; top:61%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:25%; top:82%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:50%; top:18%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:48%; top:39%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:48%; top:61%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:50%; top:82%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:78%; top:39%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:78%; top:61%;"></span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-label">
+                        تشكيل
+                    </span>
+
+                    <h3>تشكيل 4-4-2</h3>
+
+                    <p>
+                        تشكيل متوازن بين الدفاع والوسط والهجوم.
+                    </p>
+
+                    <a class="open-button"
+                       href="{{ url_for('tactical_board') }}?template=formation-442">
+
+                        فتح على اللوحة
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="board-card">
+
+                <div class="board-preview">
+
+                    <span class="preview-cone red"
+                          style="left:28%; top:25%;"></span>
+
+                    <span class="preview-cone red"
+                          style="left:72%; top:25%;"></span>
+
+                    <span class="preview-cone red"
+                          style="left:28%; top:75%;"></span>
+
+                    <span class="preview-cone red"
+                          style="left:72%; top:75%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:32%; top:30%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:68%; top:30%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:32%; top:70%;"></span>
+
+                    <span class="preview-player blue"
+                          style="left:68%; top:70%;"></span>
+
+                    <span class="preview-player red"
+                          style="left:45%; top:45%;"></span>
+
+                    <span class="preview-player red"
+                          style="left:55%; top:55%;"></span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-label">
+                        تدريب
+                    </span>
+
+                    <h3>استحواذ 4 ضد 2</h3>
+
+                    <p>
+                        تدريب لتطوير التمرير السريع والتحرك والضغط.
+                    </p>
+
+                    <a class="open-button"
+                       href="{{ url_for('tactical_board') }}?template=rondo-4v2">
+
+                        فتح على اللوحة
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="board-card">
+
+                <div class="board-preview">
+
+                    <span class="preview-cone"
+                          style="left:30%; top:70%;"></span>
+
+                    <span class="preview-cone"
+                          style="left:70%; top:70%;"></span>
+
+                    <span class="preview-cone"
+                          style="left:50%; top:25%;"></span>
+
+                    <span class="preview-player"
+                          style="left:30%; top:62%;"></span>
+
+                    <span class="preview-player"
+                          style="left:70%; top:62%;"></span>
+
+                    <span class="preview-player"
+                          style="left:50%; top:33%;"></span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-label">
+                        تدريب
+                    </span>
+
+                    <h3>التمرير المثلثي</h3>
+
+                    <p>
+                        تدريب على دقة التمرير والتحرك بعد تمرير الكرة.
+                    </p>
+
+                    <a class="open-button"
+                       href="{{ url_for('tactical_board') }}?template=triangle-passing">
+
+                        فتح على اللوحة
+
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <section class="section"
+         id="saved-boards">
+
+        <div class="section-heading">
+
+            <h2>محفوظاتي</h2>
+
+            <p>
+                اللوحات التي حفظتها من داخل اللوحة التكتيكية.
+            </p>
+
+        </div>
+
+        <div class="boards-grid"
+             id="savedBoardsGrid">
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+    const savedBoardsGrid =
+        document.getElementById(
+            "savedBoardsGrid"
+        );
+
+    const tacticalBoardUrl =
+        "{{ url_for('tactical_board') }}";
+
+
+    function displaySavedBoards() {
+        const savedBoards =
+            JSON.parse(
+                localStorage.getItem(
+                    "coachflowSavedBoards"
+                )
+            ) || [];
+
+        savedBoardsGrid.innerHTML = "";
+
+        if (savedBoards.length === 0) {
+            savedBoardsGrid.innerHTML = `
+                <div class="empty-saved">
+                    لم تحفظي أي لوحة حتى الآن.
+                    افتح اللوحة التكتيكية واضغط
+                    على «حفظ في محفوظاتي».
+                </div>
+            `;
+
+            return;
+        }
+
+        savedBoards.forEach(function (board) {
+            const card =
+                document.createElement("article");
+
+            card.className =
+                "board-card saved-card";
+
+            card.innerHTML = `
+                <div class="card-content">
+
+                    <span class="card-label">
+                        لوحة محفوظة
+                    </span>
+
+                    <h3>
+                        ${escapeHtml(board.name)}
+                    </h3>
+
+                    <p>
+                        تاريخ الحفظ:
+                        ${escapeHtml(board.createdAt)}
+                    </p>
+
+                    <div class="saved-actions">
+
+                        <a class="open-button"
+                           href="${tacticalBoardUrl}?saved=${board.id}">
+
+                            فتح اللوحة
+
+                        </a>
+
+                        <button type="button"
+                                class="delete-saved-button"
+                                data-board-id="${board.id}">
+
+                            حذف
+
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+            savedBoardsGrid.appendChild(card);
+        });
+
+        document
+            .querySelectorAll(
+                ".delete-saved-button"
+            )
+            .forEach(function (button) {
+                button.addEventListener(
+                    "click",
+                    function () {
+                        deleteSavedBoard(
+                            button.dataset.boardId
+                        );
+                    }
+                );
+            });
+    }
+
+
+    function deleteSavedBoard(boardId) {
+        const confirmed = confirm(
+            "هل تريد حذف هذه اللوحة من محفوظاتك؟"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const savedBoards =
+            JSON.parse(
+                localStorage.getItem(
+                    "coachflowSavedBoards"
+                )
+            ) || [];
+
+        const updatedBoards =
+            savedBoards.filter(
+                function (board) {
+                    return String(board.id) !==
+                        String(boardId);
+                }
+            );
+
+        localStorage.setItem(
+            "coachflowSavedBoards",
+            JSON.stringify(updatedBoards)
+        );
+
+        displaySavedBoards();
+    }
+
+
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    displaySavedBoards();
+</script>
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

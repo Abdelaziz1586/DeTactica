@@ -1,0 +1,1 @@
+Extract the ZIP. Open DeTactica_VERCEL_UPLOAD_READY. Double-click RUN_DETACTICA.bat. First run requires internet to install Python dependencies. Open http://127.0.0.1:5000. Do not close the command window while using the site.

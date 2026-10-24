@@ -1,0 +1,5421 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}"
+      dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+   <title>{{ t("tactical_board") }} | DeTactica</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #edf2ef;
+            color: #082d24;
+            font-family: "Tajawal", Arial, sans-serif;
+        }
+
+        button,
+        a,
+        input {
+            font-family: inherit;
+        }
+
+        button {
+            border: none;
+        }
+
+        .board-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            min-height: 100vh;
+            padding: 24px 18px;
+            background: #063d30;
+            color: white;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 5px solid #ff7043;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        .sidebar-title {
+            margin: 22px 0 12px;
+            color: #b8d3ca;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .tool-button {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            margin-bottom: 9px;
+            padding: 12px 13px;
+
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 12px;
+
+            background: rgba(255,255,255,.07);
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 15px;
+            font-weight: 800;
+
+            transition: .2s;
+        }
+
+        .tool-button:hover {
+            background: rgba(255,112,67,.8);
+        }
+
+        .tool-button.active-tool {
+            background: #ff7043;
+            border-color: #ff7043;
+        }
+
+        .tool-icon {
+            width: 31px;
+            height: 31px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: white;
+            color: #082d24;
+
+            font-size: 17px;
+        }
+
+
+        /* =========================
+           PLAYER COLORS
+        ========================= */
+
+        .player-options {
+            margin-bottom: 14px;
+            padding: 12px;
+
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 14px;
+
+            background: rgba(255,255,255,.05);
+        }
+
+        .color-title {
+            margin: 11px 0 10px;
+            color: #d8e8e2;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .color-options {
+            display: grid;
+            grid-template-columns: repeat(5,1fr);
+            gap: 8px;
+        }
+
+        .color-option {
+            width: 100%;
+            aspect-ratio: 1;
+
+            border: 3px solid rgba(255,255,255,.55);
+            border-radius: 50%;
+
+            cursor: pointer;
+        }
+
+        .color-option.selected-color {
+            border-color: white;
+
+            outline: 3px solid #ff7043;
+            outline-offset: 2px;
+        }
+
+        .color-orange {
+            background: #ff7043;
+        }
+
+        .color-blue {
+            background: #2878d0;
+        }
+
+        .color-yellow {
+            background: #e2b42c;
+        }
+
+        .color-red {
+            background: #d63e3e;
+        }
+
+        .color-purple {
+            background: #7a4fc4;
+        }
+
+
+        /* =========================
+           SIZE CONTROL
+        ========================= */
+
+        .size-control {
+            margin: 14px 0;
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            background: rgba(255,255,255,.08);
+
+            border: 1px solid rgba(255,255,255,.14);
+        }
+
+        .size-control-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .size-value {
+            padding: 4px 8px;
+
+            border-radius: 8px;
+
+            background: #ff7043;
+
+            font-size: 13px;
+        }
+
+        #sizeSlider {
+            width: 100%;
+            cursor: pointer;
+
+            accent-color: #ff7043;
+        }
+
+        .size-hint {
+            margin: 8px 0 0;
+
+            color: #c6dcd5;
+
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           BUTTON TYPES
+        ========================= */
+
+        .danger-button:hover {
+            background: #d63e3e;
+        }
+
+        .save-button:hover {
+            background: #138b68;
+        }
+
+        .simulation-button {
+            background: rgba(255,112,67,.16);
+            border-color: rgba(255,112,67,.55);
+        }
+
+        .play-button {
+            background: rgba(21,148,113,.28);
+            border-color: rgba(69,220,170,.4);
+        }
+
+        .back-link {
+            display: block;
+
+            margin-top: 25px;
+            padding: 12px;
+
+            border-radius: 11px;
+
+            background: white;
+            color: #063d30;
+
+            text-align: center;
+            text-decoration: none;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+            min-width: 0;
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+            padding: 17px 20px;
+
+            border-radius: 17px;
+
+            background: white;
+
+            box-shadow: 0 8px 25px rgba(0,0,0,.07);
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .topbar p {
+            margin: 5px 0 0;
+            color: #6d7c77;
+        }
+
+        .selected-message {
+            min-width: 220px;
+
+            padding: 10px 15px;
+
+            border-radius: 10px;
+
+            background: #e9f8f2;
+            color: #08795b;
+
+            text-align: center;
+
+            font-weight: 800;
+        }
+
+        .pitch-wrapper {
+            padding: 18px;
+
+            border-radius: 22px;
+
+            background: white;
+
+            box-shadow: 0 12px 35px rgba(0,0,0,.09);
+        }
+
+
+        /* =========================
+           PITCH
+        ========================= */
+
+        .pitch {
+            position: relative;
+
+            width: 100%;
+
+            min-height: 650px;
+
+            overflow: hidden;
+
+            border: 5px solid #d8e8df;
+            border-radius: 18px;
+
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    #126246 0,
+                    #126246 100px,
+                    #176d4e 100px,
+                    #176d4e 200px
+                );
+
+            cursor: crosshair;
+
+            touch-action: none;
+        }
+
+        .outer-line {
+            position: absolute;
+
+            inset: 35px;
+
+            border: 3px solid rgba(255,255,255,.78);
+
+            pointer-events: none;
+        }
+
+        .center-line {
+            position: absolute;
+
+            top: 35px;
+            bottom: 35px;
+
+            left: 50%;
+
+            width: 3px;
+
+            transform: translateX(-50%);
+
+            background: rgba(255,255,255,.78);
+
+            pointer-events: none;
+        }
+
+        .center-circle {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            width: 145px;
+            height: 145px;
+
+            transform: translate(-50%,-50%);
+
+            border: 3px solid rgba(255,255,255,.78);
+            border-radius: 50%;
+
+            pointer-events: none;
+        }
+
+        .center-dot {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            width: 9px;
+            height: 9px;
+
+            transform: translate(-50%,-50%);
+
+            border-radius: 50%;
+
+            background: white;
+
+            pointer-events: none;
+        }
+
+        .penalty-box {
+            position: absolute;
+
+            top: 50%;
+
+            width: 150px;
+            height: 280px;
+
+            transform: translateY(-50%);
+
+            border: 3px solid rgba(255,255,255,.78);
+
+            pointer-events: none;
+        }
+
+        .penalty-left {
+            left: 35px;
+            border-left: 0;
+        }
+
+        .penalty-right {
+            right: 35px;
+            border-right: 0;
+        }
+
+        .goal-box {
+            position: absolute;
+
+            top: 50%;
+
+            width: 65px;
+            height: 135px;
+
+            transform: translateY(-50%);
+
+            border: 3px solid rgba(255,255,255,.78);
+
+            pointer-events: none;
+        }
+
+        .goal-left {
+            left: 35px;
+            border-left: 0;
+        }
+
+        .goal-right {
+            right: 35px;
+            border-right: 0;
+        }
+
+        .goal {
+            position: absolute;
+
+            top: 50%;
+
+            width: 20px;
+            height: 85px;
+
+            transform: translateY(-50%);
+
+            border: 3px solid rgba(255,255,255,.85);
+
+            pointer-events: none;
+        }
+
+        .goal-left-net {
+            left: 15px;
+        }
+
+        .goal-right-net {
+            right: 15px;
+        }
+
+
+        /* =========================
+           DRAWINGS
+        ========================= */
+
+        .pitch-drawings {
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 7;
+
+            width: 100%;
+            height: 100%;
+
+            overflow: visible;
+
+            pointer-events: none;
+        }
+
+        .tactical-drawing {
+            stroke: white;
+
+            stroke-width: 6;
+
+            stroke-linecap: round;
+
+            filter:
+                drop-shadow(
+                    0 3px 3px rgba(0,0,0,.35)
+                );
+
+            pointer-events: stroke;
+
+            cursor: pointer;
+        }
+
+        .tactical-drawing.selected-drawing {
+            stroke: #ffe85b;
+            stroke-width: 8;
+        }
+
+        .drawing-start-circle {
+            fill: #ffe85b;
+
+            stroke: white;
+            stroke-width: 3;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           BOARD ITEMS
+        ========================= */
+
+        .board-item {
+            --item-scale: 1;
+
+            position: absolute;
+
+            z-index: 10;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            user-select: none;
+
+            cursor: grab;
+
+            transform:
+                translate(-50%,-50%)
+                scale(var(--item-scale));
+
+            transform-origin: center center;
+        }
+
+        .board-item:active {
+            cursor: grabbing;
+        }
+
+        .board-item.selected {
+            outline: 4px solid #ffe85b;
+            outline-offset: 4px;
+        }
+
+
+        /* PLAYER */
+
+        .player {
+            width: 45px;
+            height: 45px;
+
+            border: 3px solid white;
+            border-radius: 50%;
+
+            color: white;
+
+            box-shadow:
+                0 5px 10px rgba(0,0,0,.25);
+
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+
+        /* GOALKEEPER */
+
+        .goalkeeper {
+            width: 48px;
+            height: 48px;
+
+            border: 3px solid white;
+            border-radius: 50%;
+
+            background: #56c06f;
+            color: white;
+
+            box-shadow:
+                0 5px 10px rgba(0,0,0,.25);
+
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+
+        /* BALL */
+
+        .ball-item {
+            width: 39px;
+            height: 39px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            font-size: 25px;
+        }
+
+
+        /* CONE */
+
+        .cone-item {
+            width: 50px;
+            height: 62px;
+
+            background: transparent;
+
+            overflow: visible;
+        }
+
+        .cone-item svg {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            pointer-events: none;
+
+            filter:
+                drop-shadow(
+                    0 4px 3px rgba(0,0,0,.3)
+                );
+        }
+
+
+        /* DISC */
+
+        .disc-item {
+            width: 54px;
+            height: 24px;
+
+            overflow: visible;
+        }
+
+        .disc-item svg {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            pointer-events: none;
+
+            filter:
+                drop-shadow(
+                    0 3px 3px rgba(0,0,0,.25)
+                );
+        }
+
+
+        /* LADDER */
+
+        .ladder-item {
+            width: 95px;
+            height: 36px;
+
+            border: 4px solid white;
+
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0,
+                    transparent 15px,
+                    white 15px,
+                    white 19px
+                );
+        }
+
+
+        /* =========================
+           HURDLE
+        ========================= */
+
+        .hurdle-item {
+            width: 90px;
+            height: 32px;
+
+            position: absolute;
+
+            background: transparent;
+        }
+
+        .hurdle-item::before {
+            content: "";
+
+            position: absolute;
+
+            left: 12px;
+            right: 12px;
+            top: 12px;
+
+            height: 6px;
+
+            background: #ffd21c;
+
+            border-radius: 5px;
+
+            box-shadow:
+                0 2px 4px rgba(0,0,0,.25);
+        }
+
+        .hurdle-item::after {
+            content: "";
+
+            position: absolute;
+
+            left: 3px;
+            top: 6px;
+
+            width: 18px;
+            height: 18px;
+
+            border-radius: 50%;
+
+            background: #ef3838;
+
+            box-shadow:
+                66px 0 0 #ef3838,
+                0 2px 4px rgba(0,0,0,.25);
+        }
+
+
+        /* =========================
+           HUMAN MANNEQUIN
+        ========================= */
+
+        .mannequin-item {
+            width: 50px;
+            height: 110px;
+
+            position: absolute;
+
+            background: transparent;
+
+            overflow: visible;
+        }
+
+        .mannequin-item svg {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            pointer-events: none;
+
+            filter:
+                drop-shadow(
+                    0 4px 3px rgba(0,0,0,.35)
+                );
+        }
+
+
+        /* =========================
+           INSTRUCTIONS
+        ========================= */
+
+        .instructions {
+            margin-top: 15px;
+
+            padding: 14px;
+
+            border-radius: 13px;
+
+            background: #fff7e5;
+            color: #72581b;
+
+            line-height: 1.8;
+        }
+
+/* =========================
+   DESKTOP - FIXED BOARD + SCROLLABLE SIDEBAR
+========================= */
+
+@media (min-width: 901px) {
+
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .board-page {
+        height: 100vh;
+        min-height: 0;
+        grid-template-columns: 300px minmax(0, 1fr);
+        overflow: hidden;
+    }
+
+    .sidebar {
+        height: 100vh;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,.35) transparent;
+    }
+
+    .sidebar::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,.30);
+        border-radius: 20px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,112,67,.8);
+    }
+
+    .main-content {
+        height: 100vh;
+        min-height: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+    .topbar {
+        flex: 0 0 auto;
+    }
+
+    .pitch-wrapper {
+        flex: 1;
+        min-height: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+    .pitch {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+    }
+
+    .instructions {
+        flex: 0 0 auto;
+    }
+}
+
+
+/* =========================
+   TABLET + MOBILE
+========================= */
+/* ==========================================
+   MOBILE DRAWER CONTROLS
+========================================== */
+
+.mobile-tools-toggle,
+.sidebar-overlay,
+.mobile-sidebar-header {
+    display: none;
+}
+
+
+/* ==========================================
+   TABLET + MOBILE
+========================================== */
+
+@media (max-width: 900px) {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        background: #031f18;
+    }
+
+    .board-page {
+        display: block;
+        width: 100%;
+        height: 100dvh;
+        min-height: 100dvh;
+        overflow: hidden;
+    }
+
+
+    /* ===============================
+       MAIN BOARD
+    =============================== */
+
+    .main-content {
+        width: 100%;
+        height: 100dvh;
+
+        padding: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+    }
+
+
+    /* ===============================
+       TOP BAR
+    =============================== */
+
+    .topbar {
+        flex: 0 0 auto;
+
+        margin: 0;
+        padding: 10px 70px 10px 12px;
+
+        min-height: 66px;
+
+        border-radius: 0;
+
+        background: #062c23;
+        color: white;
+
+        box-shadow: none;
+    }
+
+    .topbar h1 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .topbar p {
+        display: none;
+    }
+
+    .selected-message {
+        min-width: 0;
+        width: auto;
+
+        padding: 7px 10px;
+
+        background: rgba(255,255,255,.1);
+        color: white;
+
+        font-size: 11px;
+    }
+
+
+    /* ===============================
+       PITCH WRAPPER
+    =============================== */
+
+    .pitch-wrapper {
+        flex: 1;
+
+        width: 100%;
+        min-height: 0;
+
+        padding: 6px;
+
+        display: flex;
+        flex-direction: column;
+
+        border-radius: 0;
+
+        background: #031f18;
+
+        box-shadow: none;
+
+        overflow: hidden;
+    }
+
+
+    /* ===============================
+       PORTRAIT FOOTBALL PITCH
+    =============================== */
+
+    .pitch {
+        flex: 1;
+
+        width: 100%;
+        height: 100%;
+
+        min-height: 0;
+
+        border: 3px solid #d8e8df;
+        border-radius: 13px;
+
+        background:
+            repeating-linear-gradient(
+                0deg,
+                #126246 0,
+                #126246 90px,
+                #176d4e 90px,
+                #176d4e 180px
+            );
+
+        overflow: hidden;
+
+        touch-action: none;
+    }
+
+
+    /* ===============================
+       TURN FIELD MARKINGS VERTICAL
+    =============================== */
+
+    .outer-line {
+        inset: 18px;
+
+        border-width: 2px;
+    }
+
+
+    .center-line {
+        top: 50%;
+        bottom: auto;
+        left: 18px;
+        right: 18px;
+
+        width: auto;
+        height: 2px;
+
+        transform: translateY(-50%);
+
+        background: rgba(255,255,255,.78);
+    }
+
+
+    .center-circle {
+        width: 92px;
+        height: 92px;
+
+        border-width: 2px;
+    }
+
+
+    /* ===============================
+       PENALTY BOXES
+    =============================== */
+
+    .penalty-box {
+        left: 50%;
+
+        width: 56%;
+        height: 105px;
+
+        transform: translateX(-50%);
+
+        border: 2px solid rgba(255,255,255,.78);
+    }
+
+
+    .penalty-left {
+        top: 18px;
+        left: 50%;
+
+        border-top: 0;
+    }
+
+
+    .penalty-right {
+        top: auto;
+        right: auto;
+        bottom: 18px;
+        left: 50%;
+
+        border-bottom: 0;
+    }
+
+
+    /* ===============================
+       GOAL BOX
+    =============================== */
+
+    .goal-box {
+        left: 50%;
+
+        width: 30%;
+        height: 48px;
+
+        transform: translateX(-50%);
+
+        border: 2px solid rgba(255,255,255,.78);
+    }
+
+
+    .goal-left {
+        top: 18px;
+        left: 50%;
+
+        border-top: 0;
+    }
+
+
+    .goal-right {
+        top: auto;
+        right: auto;
+        bottom: 18px;
+        left: 50%;
+
+        border-bottom: 0;
+    }
+
+
+    /* ===============================
+       GOALS
+    =============================== */
+
+    .goal {
+        left: 50%;
+
+        width: 24%;
+        height: 13px;
+
+        transform: translateX(-50%);
+
+        border: 2px solid rgba(255,255,255,.85);
+    }
+
+
+    .goal-left-net {
+        top: 4px;
+        left: 50%;
+    }
+
+
+    .goal-right-net {
+        top: auto;
+        right: auto;
+        bottom: 4px;
+        left: 50%;
+    }
+
+
+    /* ===============================
+       INSTRUCTIONS
+    =============================== */
+
+    .instructions {
+        display: none;
+    }
+
+
+    /* =================================
+       MOBILE TOOL BUTTON
+    ================================= */
+
+    .mobile-tools-toggle {
+        position: fixed;
+
+        top: 12px;
+        right: 10px;
+
+        z-index: 1002;
+
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 10px 12px;
+
+        border-radius: 12px;
+
+        background: #ff7043;
+        color: white;
+
+        box-shadow: 0 5px 18px rgba(0,0,0,.25);
+
+        font-size: 15px;
+        font-weight: 900;
+
+        cursor: pointer;
+    }
+
+
+    /* =================================
+       SIDEBAR DRAWER
+    ================================= */
+
+    .sidebar {
+        position: fixed;
+
+        top: 0;
+        right: 0;
+
+        z-index: 1100;
+
+        width: min(330px, 87vw);
+        height: 100dvh;
+        min-height: 0;
+
+        padding: 15px;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        background: #063d30;
+
+        box-shadow:
+            -10px 0 35px rgba(0,0,0,.35);
+
+        transform: translateX(105%);
+
+        transition:
+            transform .28s ease;
+
+        overscroll-behavior: contain;
+    }
+
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+
+    /* =================================
+       DRAWER HEADER
+    ================================= */
+
+    .mobile-sidebar-header {
+        position: sticky;
+
+        top: -15px;
+
+        z-index: 5;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin: -15px -15px 15px;
+        padding: 14px 16px;
+
+        background: #052f25;
+
+        border-bottom:
+            1px solid rgba(255,255,255,.12);
+    }
+
+
+    .mobile-sidebar-header strong {
+        font-size: 17px;
+    }
+
+
+    .close-sidebar-button {
+        width: 38px;
+        height: 38px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: rgba(255,255,255,.12);
+        color: white;
+
+        font-size: 27px;
+
+        cursor: pointer;
+    }
+
+
+    /* =================================
+       OVERLAY
+    ================================= */
+
+    .sidebar-overlay {
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 1050;
+
+        display: block;
+
+        background: rgba(0,0,0,.55);
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition: .25s;
+    }
+
+
+    .sidebar-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+
+    /* =================================
+       SIDEBAR CONTENT
+    ================================= */
+
+    .brand {
+        margin-bottom: 16px;
+
+        font-size: 20px;
+    }
+
+
+    .brand-icon {
+        width: 36px;
+        height: 36px;
+
+        border-width: 4px;
+    }
+
+
+    .tool-button {
+        min-height: 48px;
+
+        padding: 10px 12px;
+    }
+
+
+    .sidebar-title {
+        margin: 18px 0 10px;
+    }
+
+
+    .color-options {
+        grid-template-columns:
+            repeat(5, 38px);
+
+        justify-content: start;
+    }
+
+
+    /* =================================
+       BOARD ITEMS
+    ================================= */
+
+    .player {
+        width: 38px;
+        height: 38px;
+
+        font-size: 13px;
+    }
+
+
+    .goalkeeper {
+        width: 40px;
+        height: 40px;
+
+        font-size: 14px;
+    }
+
+
+    .ball-item {
+        width: 32px;
+        height: 32px;
+
+        font-size: 21px;
+    }
+
+
+    .cone-item {
+        width: 40px;
+        height: 50px;
+    }
+
+
+    .disc-item {
+        width: 44px;
+        height: 20px;
+    }
+
+
+    .ladder-item {
+        width: 76px;
+        height: 29px;
+    }
+
+
+    .hurdle-item {
+        width: 72px;
+        height: 27px;
+    }
+
+
+    .mannequin-item {
+        width: 40px;
+        height: 88px;
+    }
+}
+
+
+/* ==========================================
+   VERY SMALL MOBILE
+========================================== */
+
+@media (max-width: 430px) {
+
+    .topbar {
+        min-height: 61px;
+
+        padding-right: 67px;
+    }
+
+    .topbar h1 {
+        font-size: 16px;
+    }
+
+    .selected-message {
+        font-size: 10px;
+        padding: 6px;
+    }
+
+    .mobile-tools-toggle span {
+        display: none;
+    }
+
+    .mobile-tools-toggle {
+        width: 45px;
+        height: 45px;
+
+        justify-content: center;
+
+        padding: 0;
+
+        font-size: 21px;
+    }
+
+    .pitch-wrapper {
+        padding: 4px;
+    }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 520px) {
+
+    .main-content {
+        padding: 7px;
+    }
+
+    .topbar {
+        padding: 11px;
+    }
+
+    .topbar h1 {
+        font-size: 19px;
+    }
+
+    .topbar p {
+        font-size: 12px;
+    }
+
+    .pitch-wrapper {
+        padding: 5px;
+    }
+
+    .pitch {
+        aspect-ratio: 1.35 / 1;
+    }
+
+    .player {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+
+    .goalkeeper {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .ball-item {
+        width: 31px;
+        height: 31px;
+        font-size: 20px;
+    }
+
+    .cone-item {
+        width: 40px;
+        height: 50px;
+    }
+
+    .disc-item {
+        width: 43px;
+        height: 20px;
+    }
+
+    .ladder-item {
+        width: 75px;
+        height: 29px;
+    }
+
+    .hurdle-item {
+        width: 72px;
+        height: 27px;
+    }
+
+    .mannequin-item {
+        width: 40px;
+        height: 88px;
+    }
+
+    .color-options {
+        grid-template-columns: repeat(5, 42px);
+        justify-content: start;
+    }
+}
+    </style>
+</head>
+
+
+<body>
+
+<div class="board-page">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+<aside class="sidebar">
+
+    <div class="mobile-sidebar-header">
+        <strong>{{ t("board_tools") }}</strong>
+
+        <button type="button"
+                id="closeSidebarButton"
+                class="close-sidebar-button">
+            ×
+        </button>
+    </div>
+
+    <a href="{{ url_for('home') }}"
+       class="brand notranslate"
+       translate="no">
+
+        <span class="brand-icon">D</span>
+        <span>DeTactica</span>
+    </a>
+
+    <p class="sidebar-title">
+        {{ t("training_elements") }}
+    </p>
+
+    <!-- PLAYERS -->
+
+    <div class="player-options">
+
+        <button type="button"
+                class="tool-button"
+                id="playerToolButton">
+
+            <span class="tool-icon">👤</span>
+            {{ t("add_players") }}
+
+        </button>
+
+        <p class="color-title">
+            {{ t("choose_player_color") }}
+        </p>
+
+        <div class="color-options">
+
+            <button type="button"
+                    class="color-option color-orange selected-color"
+                    data-color="#ff7043"></button>
+
+            <button type="button"
+                    class="color-option color-blue"
+                    data-color="#2878d0"></button>
+
+            <button type="button"
+                    class="color-option color-yellow"
+                    data-color="#e2b42c"></button>
+
+            <button type="button"
+                    class="color-option color-red"
+                    data-color="#d63e3e"></button>
+
+            <button type="button"
+                    class="color-option color-purple"
+                    data-color="#7a4fc4"></button>
+
+        </div>
+    </div>
+
+    <!-- GOALKEEPER -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="goalkeeper">
+
+        <span class="tool-icon">🧤</span>
+        {{ t("goalkeeper") }}
+
+    </button>
+
+    <!-- BALL -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="ball">
+
+        <span class="tool-icon">⚽</span>
+        {{ t("ball") }}
+
+    </button>
+
+    <!-- CONES -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="cone-red">
+
+        <span class="tool-icon" style="color:#ef3838;">▲</span>
+        {{ t("red_cone") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button"
+            data-tool="cone-blue">
+
+        <span class="tool-icon" style="color:#2888e8;">▲</span>
+        {{ t("blue_cone") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button"
+            data-tool="cone-yellow">
+
+        <span class="tool-icon" style="color:#ffd21c;">▲</span>
+        {{ t("yellow_cone") }}
+
+    </button>
+
+    <!-- DISCS -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="disc-yellow">
+
+        <span class="tool-icon" style="color:#ffd21c;">◠</span>
+        {{ t("yellow_disc") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button"
+            data-tool="disc-red">
+
+        <span class="tool-icon" style="color:#ef3838;">◠</span>
+        {{ t("red_disc") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button"
+            data-tool="disc-blue">
+
+        <span class="tool-icon" style="color:#2888e8;">◠</span>
+        {{ t("blue_disc") }}
+
+    </button>
+
+    <!-- LADDER -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="ladder">
+
+        <span class="tool-icon">▥</span>
+        {{ t("training_ladder") }}
+
+    </button>
+
+    <!-- HURDLE -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="hurdle">
+
+        <span class="tool-icon">🚧</span>
+        {{ t("training_hurdle") }}
+
+    </button>
+
+    <!-- MANNEQUIN -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="mannequin">
+
+        <span class="tool-icon">🧍</span>
+        {{ t("mannequin") }}
+
+    </button>
+
+    <!-- ARROW -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="arrow">
+
+        <span class="tool-icon">➜</span>
+        {{ t("draw_arrow") }}
+
+    </button>
+
+    <!-- LINE -->
+
+    <button type="button"
+            class="tool-button"
+            data-tool="line">
+
+        <span class="tool-icon">━</span>
+        {{ t("draw_line") }}
+
+    </button>
+
+
+    <!-- SIZE -->
+
+    <p class="sidebar-title">
+        {{ t("item_size") }}
+    </p>
+
+    <div class="size-control">
+
+        <div class="size-control-header">
+
+            <span>{{ t("resize") }}</span>
+
+            <span class="size-value"
+                  id="sizeValue">
+                100%
+            </span>
+
+        </div>
+
+        <input type="range"
+               id="sizeSlider"
+               min="40"
+               max="200"
+               value="100"
+               step="5">
+
+        <p class="size-hint">
+            {{ t("size_hint") }}
+        </p>
+
+    </div>
+
+
+    <!-- SIMULATION -->
+
+    <p class="sidebar-title">
+        {{ t("movement_simulation") }}
+    </p>
+
+    <button type="button"
+            class="tool-button simulation-button"
+            id="recordMovementButton">
+
+        <span class="tool-icon">🎬</span>
+        {{ t("record_movement") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button play-button"
+            id="playSimulationButton">
+
+        <span class="tool-icon">▶</span>
+        {{ t("play_simulation") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button"
+            id="resetSimulationButton">
+
+        <span class="tool-icon">↩</span>
+        {{ t("reset_start") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button danger-button"
+            id="clearMovementsButton">
+
+        <span class="tool-icon">🧹</span>
+        {{ t("clear_movements") }}
+
+    </button>
+
+
+    <!-- CONTROLS -->
+
+    <p class="sidebar-title">
+        {{ t("controls") }}
+    </p>
+
+    <button type="button"
+            class="tool-button save-button"
+            id="saveButton">
+
+        <span class="tool-icon">💾</span>
+        {{ t("save_to_my_boards") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button"
+            id="stopToolButton">
+
+        <span class="tool-icon">✋</span>
+        {{ t("stop_adding") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button danger-button"
+            id="deleteButton">
+
+        <span class="tool-icon">🗑️</span>
+        {{ t("delete_selected") }}
+
+    </button>
+
+    <button type="button"
+            class="tool-button danger-button"
+            id="clearButton">
+
+        <span class="tool-icon">×</span>
+        {{ t("clear_board") }}
+
+    </button>
+
+    <a href="{{ url_for('sport_details', slug='football') }}"
+       class="back-link">
+        {{ t("back_to_football") }}
+    </a>
+
+</aside>
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="main-content">
+<div class="topbar">
+
+    <div>
+        <h1>
+            {{ t("tactical_board") }}
+        </h1>
+
+        <p>
+            {{ t("board_subtitle") }}
+        </p>
+    </div>
+
+    <div class="selected-message"
+         id="selectedMessage">
+        {{ t("choose_tool") }}
+    </div>
+
+</div>
+
+        <div class="pitch-wrapper">
+
+
+            <div class="pitch"
+                 id="pitch">
+
+
+                <svg id="drawingLayer"
+                     class="pitch-drawings">
+
+                    <defs>
+
+                        <marker id="arrowHead"
+                               viewBox="0 0 20 20"
+                               markerWidth="20"
+                               markerHeight="20"
+                               refX="18"
+                               refY="10"
+                               orient="auto"
+                               markerUnits="userSpaceOnUse"
+                               overflow="visible">
+
+                            <!-- Full, symmetrical arrowhead with a clear pointed tip. -->
+                            <path d="M 1 1 L 19 10 L 1 19 L 5 10 Z"
+                                 fill="white">
+                            </path>
+
+                        </marker>
+
+                    </defs>
+
+                </svg>
+
+
+                <div class="outer-line"></div>
+
+                <div class="center-line"></div>
+
+                <div class="center-circle"></div>
+
+                <div class="center-dot"></div>
+
+                <div class="penalty-box penalty-left"></div>
+
+                <div class="penalty-box penalty-right"></div>
+
+                <div class="goal-box goal-left"></div>
+
+                <div class="goal-box goal-right"></div>
+
+                <div class="goal goal-left-net"></div>
+
+                <div class="goal goal-right-net"></div>
+
+
+            </div>
+
+
+            <div class="instructions">
+
+                <strong>
+                    الاستخدام:
+                </strong>
+
+                اختار أي عنصر من القائمة واضغط على الملعب.
+                يمكنك تحديد العنصر وتغيير حجمه من شريط الحجم.
+                لتسجيل حركة، حدد اللاعب أو الكرة واضغط
+                «تسجيل حركة العنصر»، ثم اسحبه لمكان النهاية.
+                بعدها استخدم «تشغيل المحاكاة».
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<!-- زر الأدوات للموبايل -->
+
+<button type="button"
+        class="mobile-tools-toggle"
+        id="mobileToolsToggle">
+
+    ☰
+<span>{{ t("tools") }}</span>
+
+</button>
+
+
+<!-- الخلفية السوداء -->
+
+<div class="sidebar-overlay"
+     id="sidebarOverlay">
+</div>
+
+
+<script>
+
+/* ========================================
+   BASIC REFERENCES
+======================================== */
+
+
+const SVG_NAMESPACE =
+    "http://www.w3.org/2000/svg";
+
+
+const pitch =
+    document.getElementById(
+        "pitch"
+    );
+
+
+const drawingLayer =
+    document.getElementById(
+        "drawingLayer"
+    );
+
+
+const selectedMessage =
+    document.getElementById(
+        "selectedMessage"
+    );
+
+
+const playerToolButton =
+    document.getElementById(
+        "playerToolButton"
+    );
+
+
+const colorButtons =
+    document.querySelectorAll(
+        ".color-option"
+    );
+
+
+const toolButtons =
+    document.querySelectorAll(
+        "[data-tool]"
+    );
+
+
+const saveButton =
+    document.getElementById(
+        "saveButton"
+    );
+
+
+const stopToolButton =
+    document.getElementById(
+        "stopToolButton"
+    );
+
+
+const deleteButton =
+    document.getElementById(
+        "deleteButton"
+    );
+
+
+const clearButton =
+    document.getElementById(
+        "clearButton"
+    );
+
+
+const sizeSlider =
+    document.getElementById(
+        "sizeSlider"
+    );
+
+
+const sizeValue =
+    document.getElementById(
+        "sizeValue"
+    );
+
+
+let selectedTool =
+    null;
+
+
+let selectedItem =
+    null;
+
+
+let selectedDrawing =
+    null;
+
+
+let selectedPlayerColor =
+    "#ff7043";
+
+
+let playerNumber =
+    1;
+
+
+let isDragging =
+    false;
+
+
+let drawingStart =
+    null;
+
+
+let drawingStartCircle =
+    null;
+
+
+
+/* ========================================
+   TOOL SELECTION
+======================================== */
+
+
+playerToolButton.addEventListener(
+    "click",
+    function () {
+
+        selectTool(
+            "player",
+            playerToolButton
+        );
+
+    }
+);
+
+
+
+colorButtons.forEach(
+    function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                selectedPlayerColor =
+                    button.dataset.color;
+
+
+                colorButtons.forEach(
+                    function (colorButton) {
+
+                        colorButton.classList.remove(
+                            "selected-color"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add(
+                    "selected-color"
+                );
+
+
+                selectTool(
+                    "player",
+                    playerToolButton
+                );
+
+            }
+        );
+
+    }
+);
+
+
+
+toolButtons.forEach(
+    function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                selectTool(
+                    button.dataset.tool,
+                    button
+                );
+
+            }
+        );
+
+    }
+);
+
+
+
+saveButton.addEventListener(
+    "click",
+    saveBoard
+);
+
+
+stopToolButton.addEventListener(
+    "click",
+    stopAdding
+);
+
+
+deleteButton.addEventListener(
+    "click",
+    deleteSelectedObject
+);
+
+
+clearButton.addEventListener(
+    "click",
+    clearBoard
+);
+
+
+
+function selectTool(
+    toolName,
+    button
+) {
+
+    selectedTool =
+        toolName;
+
+
+    cancelDrawingStart();
+
+
+    document
+        .querySelectorAll(
+            ".tool-button"
+        )
+        .forEach(
+            function (toolButton) {
+
+                toolButton.classList.remove(
+                    "active-tool"
+                );
+
+            }
+        );
+
+
+    button.classList.add(
+        "active-tool"
+    );
+
+
+    if (
+        toolName === "arrow"
+        ||
+        toolName === "line"
+    ) {
+
+        selectedMessage.textContent =
+            "اضغط على نقطة بداية " +
+            getToolArabicName(
+                toolName
+            );
+
+
+        return;
+
+    }
+
+
+    selectedMessage.textContent =
+        "الأداة المختارة: " +
+        getToolArabicName(
+            toolName
+        );
+
+}
+
+
+
+function stopAdding() {
+
+    selectedTool =
+        null;
+
+
+    cancelDrawingStart();
+
+
+    document
+        .querySelectorAll(
+            ".tool-button"
+        )
+        .forEach(
+            function (toolButton) {
+
+                toolButton.classList.remove(
+                    "active-tool"
+                );
+
+            }
+        );
+
+
+    selectedMessage.textContent =
+        "تم إيقاف إضافة العناصر";
+
+}
+
+
+
+function getToolArabicName(
+    toolName
+) {
+
+    const names = {
+
+        player:
+            "لاعب",
+
+        goalkeeper:
+            "حارس مرمى",
+
+        ball:
+            "كرة",
+
+        cone:
+            "قمع أصفر",
+
+        "cone-red":
+            "قمع أحمر",
+
+        "cone-blue":
+            "قمع أزرق",
+
+        "cone-yellow":
+            "قمع أصفر",
+
+        "disc-red":
+            "قرص أحمر",
+
+        "disc-blue":
+            "قرص أزرق",
+
+        "disc-yellow":
+            "قرص أصفر",
+
+        ladder:
+            "سلم تدريب",
+
+       hurdle:
+    "حاجز تدريب",
+
+mannequin:
+    "حاجز بشري",
+
+arrow:
+    "السهم",
+    };
+
+
+    return (
+        names[toolName]
+        ||
+        "عنصر"
+    );
+
+}
+
+
+
+/* ========================================
+   SIZE CONTROL
+======================================== */
+
+
+sizeSlider.addEventListener(
+    "input",
+    function () {
+
+        const value =
+            Number(
+                sizeSlider.value
+            );
+
+
+        sizeValue.textContent =
+            value + "%";
+
+
+        if (
+            !selectedItem
+        ) {
+
+            return;
+
+        }
+
+
+        const scale =
+            value / 100;
+
+
+        selectedItem.style.setProperty(
+            "--item-scale",
+            scale
+        );
+
+
+        selectedItem.dataset.size =
+            value;
+
+
+        selectedMessage.textContent =
+            "حجم العنصر: " +
+            value +
+            "%";
+
+    }
+);
+
+
+
+function updateSizeSliderFromItem(
+    item
+) {
+
+    const size =
+        Number(
+            item.dataset.size
+            ||
+            100
+        );
+
+
+    sizeSlider.value =
+        size;
+
+
+    sizeValue.textContent =
+        size + "%";
+
+}
+
+
+
+/* ========================================
+   PITCH CLICK
+======================================== */
+
+
+pitch.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            isDragging
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.target.closest(
+                ".board-item"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.target.classList.contains(
+                "tactical-drawing"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !selectedTool
+        ) {
+
+            clearSelections();
+
+            return;
+
+        }
+
+
+        const position =
+            getPitchPosition(
+                event
+            );
+
+
+        if (
+            selectedTool === "arrow"
+            ||
+            selectedTool === "line"
+        ) {
+
+            handleDrawingClick(
+                selectedTool,
+                position.x,
+                position.y
+            );
+
+
+            return;
+
+        }
+
+
+        createItem(
+            selectedTool,
+            position.x,
+            position.y
+        );
+
+    }
+);
+
+
+
+function getPitchPosition(
+    event
+) {
+
+    const pitchRect =
+        pitch.getBoundingClientRect();
+
+
+    const x =
+        (
+            (
+                event.clientX
+                -
+                pitchRect.left
+            )
+            /
+            pitchRect.width
+        )
+        *
+        100;
+
+
+    const y =
+        (
+            (
+                event.clientY
+                -
+                pitchRect.top
+            )
+            /
+            pitchRect.height
+        )
+        *
+        100;
+
+
+    return {
+
+        x:
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    x
+                )
+            ),
+
+        y:
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    y
+                )
+            )
+
+    };
+
+}
+
+
+
+/* ========================================
+   DRAWING
+======================================== */
+
+
+function handleDrawingClick(
+    type,
+    x,
+    y
+) {
+
+    if (
+        !drawingStart
+    ) {
+
+        drawingStart = {
+
+            x: x,
+            y: y
+
+        };
+
+
+        showDrawingStart(
+            x,
+            y
+        );
+
+
+        selectedMessage.textContent =
+            "تم تحديد البداية، اضغط على نقطة النهاية";
+
+
+        return;
+
+    }
+
+
+    createDrawing(
+        type,
+        drawingStart.x,
+        drawingStart.y,
+        x,
+        y
+    );
+
+
+    cancelDrawingStart();
+
+}
+
+
+
+function showDrawingStart(
+    x,
+    y
+) {
+
+    removeDrawingStartCircle();
+
+
+    const circle =
+        document.createElementNS(
+            SVG_NAMESPACE,
+            "circle"
+        );
+
+
+    circle.setAttribute(
+        "cx",
+        x + "%"
+    );
+
+
+    circle.setAttribute(
+        "cy",
+        y + "%"
+    );
+
+
+    circle.setAttribute(
+        "r",
+        "8"
+    );
+
+
+    circle.classList.add(
+        "drawing-start-circle"
+    );
+
+
+    drawingLayer.appendChild(
+        circle
+    );
+
+
+    drawingStartCircle =
+        circle;
+
+}
+
+
+
+function removeDrawingStartCircle() {
+
+    if (
+        drawingStartCircle
+    ) {
+
+        drawingStartCircle.remove();
+
+
+        drawingStartCircle =
+            null;
+
+    }
+
+}
+
+
+
+function cancelDrawingStart() {
+
+    drawingStart =
+        null;
+
+
+    removeDrawingStartCircle();
+
+}
+
+
+
+function createDrawing(
+    type,
+    x1,
+    y1,
+    x2,
+    y2
+) {
+
+    const drawing =
+        document.createElementNS(
+            SVG_NAMESPACE,
+            "line"
+        );
+
+
+    drawing.setAttribute(
+        "x1",
+        x1 + "%"
+    );
+
+
+    drawing.setAttribute(
+        "y1",
+        y1 + "%"
+    );
+
+
+    drawing.setAttribute(
+        "x2",
+        x2 + "%"
+    );
+
+
+    drawing.setAttribute(
+        "y2",
+        y2 + "%"
+    );
+
+
+    drawing.dataset.type =
+        type;
+
+
+    drawing.dataset.x1 =
+        x1;
+
+
+    drawing.dataset.y1 =
+        y1;
+
+
+    drawing.dataset.x2 =
+        x2;
+
+
+    drawing.dataset.y2 =
+        y2;
+
+
+    drawing.classList.add(
+        "tactical-drawing"
+    );
+
+
+    if (
+        type === "arrow"
+    ) {
+
+        drawing.setAttribute(
+            "marker-end",
+            "url(#arrowHead)"
+        );
+
+    }
+
+
+    drawing.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+
+            selectDrawing(
+                drawing
+            );
+
+        }
+    );
+
+
+    drawingLayer.appendChild(
+        drawing
+    );
+
+}
+
+
+
+function selectDrawing(
+    drawing
+) {
+
+    clearSelections();
+
+
+    selectedDrawing =
+        drawing;
+
+
+    drawing.classList.add(
+        "selected-drawing"
+    );
+
+
+    selectedMessage.textContent =
+        "تم تحديد " +
+        getToolArabicName(
+            drawing.dataset.type
+        );
+
+}
+
+
+
+/* ========================================
+   CREATE ITEMS
+======================================== */
+
+
+function createItem(
+    type,
+    x,
+    y,
+    savedData = null
+) {
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.classList.add(
+        "board-item"
+    );
+
+
+    item.dataset.type =
+        type;
+
+
+    const savedSize =
+        Number(
+            savedData?.size
+            ||
+            100
+        );
+
+
+    item.dataset.size =
+        savedSize;
+
+
+    item.style.setProperty(
+        "--item-scale",
+        savedSize / 100
+    );
+
+
+
+    /* PLAYER */
+
+    if (
+        type === "player"
+    ) {
+
+        item.classList.add(
+            "player"
+        );
+
+
+        const playerColor =
+            savedData?.color
+            ||
+            selectedPlayerColor;
+
+
+        const number =
+            savedData?.number
+            ||
+            playerNumber;
+
+
+        item.style.backgroundColor =
+            playerColor;
+
+
+        item.textContent =
+            number;
+
+
+        item.dataset.color =
+            playerColor;
+
+
+        item.dataset.number =
+            number;
+
+
+        item.dataset.name =
+            "لاعب";
+
+
+        playerNumber =
+            Math.max(
+                playerNumber,
+                Number(number) + 1
+            );
+
+    }
+
+
+
+    /* GOALKEEPER */
+
+    if (
+        type === "goalkeeper"
+    ) {
+
+        item.classList.add(
+            "goalkeeper"
+        );
+
+
+        item.textContent =
+            "G";
+
+
+        item.dataset.name =
+            "حارس مرمى";
+
+    }
+
+
+
+    /* BALL */
+
+    if (
+        type === "ball"
+    ) {
+
+        item.classList.add(
+            "ball-item"
+        );
+
+
+        item.textContent =
+            "⚽";
+
+
+        item.dataset.name =
+            "كرة";
+
+    }
+
+
+
+    /* CONES */
+
+    if (
+        type === "cone"
+        ||
+        type === "cone-red"
+        ||
+        type === "cone-blue"
+        ||
+        type === "cone-yellow"
+    ) {
+
+        item.classList.add(
+            "cone-item"
+        );
+
+
+        const coneColors = {
+
+            "cone-red":
+                "#ef3838",
+
+            "cone-blue":
+                "#2888e8",
+
+            "cone-yellow":
+                "#ffd21c"
+
+        };
+
+
+        const coneColor =
+            savedData?.coneColor
+            ||
+            coneColors[type]
+            ||
+            "#ffd21c";
+
+
+        item.innerHTML = `
+
+            <svg viewBox="0 0 70 85">
+
+                <path
+                    d="M26 8
+                       Q35 4 44 8
+                       L55 60
+                       H15
+                       Z"
+                    fill="${coneColor}">
+                </path>
+
+
+                <path
+                    d="M21 38
+                       H49
+                       L52 50
+                       H18
+                       Z"
+                    fill="rgba(255,255,255,.35)">
+                </path>
+
+
+                <path
+                    d="M11 58
+                       Q35 52 59 58
+                       L66 70
+                       Q35 80 4 70
+                       Z"
+                    fill="${coneColor}">
+                </path>
+
+            </svg>
+
+        `;
+
+
+        item.dataset.coneColor =
+            coneColor;
+
+
+        item.dataset.name =
+            getToolArabicName(
+                type
+            );
+
+    }
+
+
+
+    /* DISCS */
+
+    if (
+        type === "disc-red"
+        ||
+        type === "disc-blue"
+        ||
+        type === "disc-yellow"
+    ) {
+
+        item.classList.add(
+            "disc-item"
+        );
+
+
+        const discColors = {
+
+            "disc-red":
+                "#ef3838",
+
+            "disc-blue":
+                "#2888e8",
+
+            "disc-yellow":
+                "#ffd21c"
+
+        };
+
+
+        const discColor =
+            savedData?.discColor
+            ||
+            discColors[type];
+
+
+        item.innerHTML = `
+
+            <svg viewBox="0 0 80 45">
+
+                <path
+                    d="M9 31
+                       Q14 12 40 8
+                       Q66 12 71 31
+                       Q40 43 9 31Z"
+                    fill="${discColor}">
+                </path>
+
+            </svg>
+
+        `;
+
+
+        item.dataset.discColor =
+            discColor;
+
+
+        item.dataset.name =
+            getToolArabicName(
+                type
+            );
+
+    }
+
+
+
+    /* LADDER */
+
+    if (
+        type === "ladder"
+    ) {
+
+        item.classList.add(
+            "ladder-item"
+        );
+
+
+        item.dataset.name =
+            "سلم تدريب";
+
+    }
+
+
+
+    /* HURDLE */
+
+    if (
+        type === "hurdle"
+    ) {
+
+        item.classList.add(
+            "hurdle-item"
+        );
+
+
+        item.dataset.name =
+            "حاجز تدريب";
+
+    }
+
+/* HUMAN MANNEQUIN */
+
+if (
+    type === "mannequin"
+) {
+
+    item.classList.add(
+        "mannequin-item"
+    );
+
+    item.innerHTML = `
+
+        <svg viewBox="0 0 100 220"
+             xmlns="http://www.w3.org/2000/svg">
+
+            <!-- HEAD -->
+            <circle
+                cx="50"
+                cy="28"
+                r="20"
+                fill="#ffd21c"
+                stroke="#111"
+                stroke-width="5">
+            </circle>
+
+            <!-- BODY -->
+            <path
+                d="
+                    M32 52
+                    Q50 42 68 52
+                    L76 125
+                    Q50 140 24 125
+                    Z
+                "
+                fill="#ffd21c"
+                stroke="#111"
+                stroke-width="5">
+            </path>
+
+            <!-- SHOULDERS / ARMS -->
+            <path
+                d="
+                    M31 60
+                    L10 110
+                    M69 60
+                    L90 110
+                "
+                fill="none"
+                stroke="#111"
+                stroke-width="9"
+                stroke-linecap="round">
+            </path>
+
+            <!-- LEGS -->
+            <path
+                d="
+                    M38 128
+                    L32 185
+                    M62 128
+                    L68 185
+                "
+                fill="none"
+                stroke="#111"
+                stroke-width="10"
+                stroke-linecap="round">
+            </path>
+
+            <!-- BASE -->
+            <rect
+                x="15"
+                y="184"
+                width="70"
+                height="15"
+                rx="7"
+                fill="#ffd21c"
+                stroke="#111"
+                stroke-width="5">
+            </rect>
+
+            <rect
+                x="5"
+                y="198"
+                width="90"
+                height="12"
+                rx="6"
+                fill="#111">
+            </rect>
+
+        </svg>
+
+    `;
+
+    item.dataset.name =
+        "حاجز بشري";
+
+}
+
+    item.style.left =
+        x + "%";
+
+
+    item.style.top =
+        y + "%";
+
+
+    pitch.appendChild(
+        item
+    );
+
+
+    makeDraggable(
+        item
+    );
+
+
+    selectItem(
+        item
+    );
+
+}
+
+
+
+/* ========================================
+   SELECTION
+======================================== */
+
+
+function selectItem(
+    item
+) {
+
+    clearSelections();
+
+
+    selectedItem =
+        item;
+
+
+    item.classList.add(
+        "selected"
+    );
+
+
+    updateSizeSliderFromItem(
+        item
+    );
+
+
+    selectedMessage.textContent =
+        "العنصر المحدد: " +
+        (
+            item.dataset.name
+            ||
+            getToolArabicName(
+                item.dataset.type
+            )
+        );
+
+}
+
+
+
+function clearSelections() {
+
+    if (
+        selectedItem
+    ) {
+
+        selectedItem.classList.remove(
+            "selected"
+        );
+
+
+        selectedItem =
+            null;
+
+    }
+
+
+    if (
+        selectedDrawing
+    ) {
+
+        selectedDrawing.classList.remove(
+            "selected-drawing"
+        );
+
+
+        selectedDrawing =
+            null;
+
+    }
+
+}
+
+
+
+/* ========================================
+   DRAGGING
+======================================== */
+
+
+function makeDraggable(
+    item
+) {
+
+    item.addEventListener(
+        "pointerdown",
+        function (event) {
+
+            event.preventDefault();
+
+
+            event.stopPropagation();
+
+
+            item.style.transition =
+                "none";
+
+
+            selectItem(
+                item
+            );
+
+
+            const pitchRect =
+                pitch.getBoundingClientRect();
+
+
+            const itemRect =
+                item.getBoundingClientRect();
+
+
+            const startX =
+                event.clientX;
+
+
+            const startY =
+                event.clientY;
+
+
+            const offsetX =
+                event.clientX
+                -
+                itemRect.left
+                -
+                itemRect.width / 2;
+
+
+            const offsetY =
+                event.clientY
+                -
+                itemRect.top
+                -
+                itemRect.height / 2;
+
+
+            item.setPointerCapture(
+                event.pointerId
+            );
+
+
+
+            function moveItem(
+                moveEvent
+            ) {
+
+                const movement =
+                    Math.abs(
+                        moveEvent.clientX
+                        -
+                        startX
+                    )
+                    +
+                    Math.abs(
+                        moveEvent.clientY
+                        -
+                        startY
+                    );
+
+
+                if (
+                    movement > 4
+                ) {
+
+                    isDragging =
+                        true;
+
+                }
+
+
+                let x =
+                    moveEvent.clientX
+                    -
+                    pitchRect.left
+                    -
+                    offsetX;
+
+
+                let y =
+                    moveEvent.clientY
+                    -
+                    pitchRect.top
+                    -
+                    offsetY;
+
+
+                x =
+                    Math.max(
+                        itemRect.width / 2,
+                        Math.min(
+                            pitchRect.width
+                            -
+                            itemRect.width / 2,
+                            x
+                        )
+                    );
+
+
+                y =
+                    Math.max(
+                        itemRect.height / 2,
+                        Math.min(
+                            pitchRect.height
+                            -
+                            itemRect.height / 2,
+                            y
+                        )
+                    );
+
+
+                item.style.left =
+                    (
+                        x
+                        /
+                        pitchRect.width
+                    )
+                    *
+                    100
+                    +
+                    "%";
+
+
+                item.style.top =
+                    (
+                        y
+                        /
+                        pitchRect.height
+                    )
+                    *
+                    100
+                    +
+                    "%";
+
+            }
+
+
+
+            function stopMove() {
+
+                item.removeEventListener(
+                    "pointermove",
+                    moveItem
+                );
+
+
+                item.removeEventListener(
+                    "pointerup",
+                    stopMove
+                );
+
+
+                item.removeEventListener(
+                    "pointercancel",
+                    stopMove
+                );
+
+
+                setTimeout(
+                    function () {
+
+                        isDragging =
+                            false;
+
+                    },
+                    100
+                );
+
+            }
+
+
+
+            item.addEventListener(
+                "pointermove",
+                moveItem
+            );
+
+
+            item.addEventListener(
+                "pointerup",
+                stopMove
+            );
+
+
+            item.addEventListener(
+                "pointercancel",
+                stopMove
+            );
+
+        }
+    );
+
+}
+
+
+
+/* ========================================
+   DELETE / CLEAR
+======================================== */
+
+
+function deleteSelectedObject() {
+
+    if (
+        selectedItem
+    ) {
+
+        movementRecords =
+            movementRecords.filter(
+                function (record) {
+
+                    return (
+                        record.item
+                        !==
+                        selectedItem
+                    );
+
+                }
+            );
+
+
+        selectedItem.remove();
+
+
+        selectedItem =
+            null;
+
+
+        sizeSlider.value =
+            100;
+
+
+        sizeValue.textContent =
+            "100%";
+
+
+        selectedMessage.textContent =
+            "تم حذف العنصر";
+
+
+        return;
+
+    }
+
+
+
+    if (
+        selectedDrawing
+    ) {
+
+        selectedDrawing.remove();
+
+
+        selectedDrawing =
+            null;
+
+
+        return;
+
+    }
+
+
+
+    alert(
+        "اختار عنصرًا أولًا."
+    );
+
+}
+
+
+
+function clearBoard() {
+
+    if (
+        !confirm(
+            "هل تريد مسح اللوحة بالكامل؟"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".board-item"
+        )
+        .forEach(
+            function (item) {
+
+                item.remove();
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".tactical-drawing"
+        )
+        .forEach(
+            function (drawing) {
+
+                drawing.remove();
+
+            }
+        );
+
+
+    movementRecords =
+        [];
+
+
+    recordingItem =
+        null;
+
+
+    recordingStart =
+        null;
+
+
+    clearSelections();
+
+
+    playerNumber =
+        1;
+
+
+    sizeSlider.value =
+        100;
+
+
+    sizeValue.textContent =
+        "100%";
+
+
+    localStorage.removeItem(
+        "coachflowFootballBoard"
+    );
+
+
+    selectedMessage.textContent =
+        "تم مسح اللوحة";
+
+}
+
+
+
+/* ========================================
+   BOARD DATA
+======================================== */
+
+
+function getCurrentBoardData() {
+
+    const boardData = {
+
+        items: [],
+
+        drawings: []
+
+    };
+
+
+
+    document
+        .querySelectorAll(
+            ".board-item"
+        )
+        .forEach(
+            function (item) {
+
+                boardData.items.push({
+
+                    type:
+                        item.dataset.type,
+
+                    x:
+                        parseFloat(
+                            item.style.left
+                        ),
+
+                    y:
+                        parseFloat(
+                            item.style.top
+                        ),
+
+                    color:
+                        item.dataset.color
+                        ||
+                        null,
+
+                    number:
+                        item.dataset.number
+                        ||
+                        null,
+
+                    coneColor:
+                        item.dataset.coneColor
+                        ||
+                        null,
+
+                    discColor:
+                        item.dataset.discColor
+                        ||
+                        null,
+
+                    size:
+                        Number(
+                            item.dataset.size
+                            ||
+                            100
+                        )
+
+                });
+
+            }
+        );
+
+
+
+    document
+        .querySelectorAll(
+            ".tactical-drawing"
+        )
+        .forEach(
+            function (drawing) {
+
+                boardData.drawings.push({
+
+                    type:
+                        drawing.dataset.type,
+
+                    x1:
+                        Number(
+                            drawing.dataset.x1
+                        ),
+
+                    y1:
+                        Number(
+                            drawing.dataset.y1
+                        ),
+
+                    x2:
+                        Number(
+                            drawing.dataset.x2
+                        ),
+
+                    y2:
+                        Number(
+                            drawing.dataset.y2
+                        )
+
+                });
+
+            }
+        );
+
+
+    return boardData;
+
+}
+
+
+
+/* ========================================
+   SAVE BOARD
+======================================== */
+
+
+function saveBoard() {
+
+    const boardData =
+        getCurrentBoardData();
+
+
+    if (
+        boardData.items.length === 0
+        &&
+        boardData.drawings.length === 0
+    ) {
+
+        alert(
+            "اللوحة فارغة."
+        );
+
+
+        return;
+
+    }
+
+
+
+    const boardName =
+        prompt(
+            "اكتب اسم اللوحة:",
+            "خطة تدريب جديدة"
+        );
+
+
+
+    if (
+        !boardName
+        ||
+        !boardName.trim()
+    ) {
+
+        return;
+
+    }
+
+
+
+    const savedBoards =
+        JSON.parse(
+            localStorage.getItem(
+                "coachflowSavedBoards"
+            )
+        )
+        ||
+        [];
+
+
+
+    savedBoards.unshift({
+
+        id:
+            Date.now(),
+
+        name:
+            boardName.trim(),
+
+        createdAt:
+            new Date()
+                .toLocaleDateString(
+                    "ar-EG"
+                ),
+
+        data:
+            boardData
+
+    });
+
+
+
+    localStorage.setItem(
+        "coachflowSavedBoards",
+        JSON.stringify(
+            savedBoards
+        )
+    );
+
+
+
+    localStorage.setItem(
+        "coachflowFootballBoard",
+        JSON.stringify(
+            boardData
+        )
+    );
+
+
+
+    selectedMessage.textContent =
+        "تم حفظ اللوحة ✅";
+
+}
+
+
+
+/* ========================================
+   READY TEMPLATES
+======================================== */
+
+
+const readyBoardTemplates = {
+
+
+    "formation-433": {
+
+        name:
+            "تشكيل 4-3-3",
+
+
+        items: [
+
+            {
+                type:"goalkeeper",
+                x:10,
+                y:50
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:15,
+                number:2,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:38,
+                number:4,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:62,
+                number:5,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:85,
+                number:3,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:48,
+                y:25,
+                number:8,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:43,
+                y:50,
+                number:6,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:48,
+                y:75,
+                number:10,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:75,
+                y:18,
+                number:7,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:82,
+                y:50,
+                number:9,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:75,
+                y:82,
+                number:11,
+                color:"#ff7043"
+            }
+
+        ],
+
+
+        drawings: []
+
+    },
+
+
+
+    "formation-442": {
+
+        name:
+            "تشكيل 4-4-2",
+
+
+        items: [
+
+            {
+                type:"goalkeeper",
+                x:10,
+                y:50
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:15,
+                number:2,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:38,
+                number:4,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:62,
+                number:5,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:25,
+                y:85,
+                number:3,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:50,
+                y:15,
+                number:7,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:48,
+                y:38,
+                number:8,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:48,
+                y:62,
+                number:6,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:50,
+                y:85,
+                number:11,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:78,
+                y:38,
+                number:9,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:78,
+                y:62,
+                number:10,
+                color:"#2878d0"
+            }
+
+        ],
+
+
+        drawings: []
+
+    },
+
+
+
+    "rondo-4v2": {
+
+        name:
+            "استحواذ 4 ضد 2",
+
+
+        items: [
+
+            {
+                type:"cone-red",
+                x:28,
+                y:25
+            },
+
+            {
+                type:"cone-red",
+                x:72,
+                y:25
+            },
+
+            {
+                type:"cone-red",
+                x:28,
+                y:75
+            },
+
+            {
+                type:"cone-red",
+                x:72,
+                y:75
+            },
+
+            {
+                type:"player",
+                x:30,
+                y:28,
+                number:1,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:70,
+                y:28,
+                number:2,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:30,
+                y:72,
+                number:3,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:70,
+                y:72,
+                number:4,
+                color:"#2878d0"
+            },
+
+            {
+                type:"player",
+                x:45,
+                y:45,
+                number:5,
+                color:"#d63e3e"
+            },
+
+            {
+                type:"player",
+                x:55,
+                y:55,
+                number:6,
+                color:"#d63e3e"
+            },
+
+            {
+                type:"ball",
+                x:34,
+                y:31
+            }
+
+        ],
+
+
+        drawings: []
+
+    },
+
+
+
+    "triangle-passing": {
+
+        name:
+            "التمرير المثلثي",
+
+
+        items: [
+
+            {
+                type:"cone-yellow",
+                x:30,
+                y:70
+            },
+
+            {
+                type:"cone-yellow",
+                x:70,
+                y:70
+            },
+
+            {
+                type:"cone-yellow",
+                x:50,
+                y:25
+            },
+
+            {
+                type:"player",
+                x:30,
+                y:65,
+                number:1,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:70,
+                y:65,
+                number:2,
+                color:"#ff7043"
+            },
+
+            {
+                type:"player",
+                x:50,
+                y:30,
+                number:3,
+                color:"#ff7043"
+            },
+
+            {
+                type:"ball",
+                x:34,
+                y:61
+            }
+
+        ],
+
+
+        drawings: []
+
+    }
+
+};
+
+
+
+/* ========================================
+   OPEN BOARD
+======================================== */
+
+
+function removeAllBoardObjects() {
+
+    document
+        .querySelectorAll(
+            ".board-item"
+        )
+        .forEach(
+            function (item) {
+
+                item.remove();
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".tactical-drawing"
+        )
+        .forEach(
+            function (drawing) {
+
+                drawing.remove();
+
+            }
+        );
+
+
+    movementRecords =
+        [];
+
+
+    recordingItem =
+        null;
+
+
+    recordingStart =
+        null;
+
+
+    clearSelections();
+
+
+    playerNumber =
+        1;
+
+}
+
+
+
+function openBoardData(
+    boardData,
+    message
+) {
+
+    removeAllBoardObjects();
+
+
+
+    (
+        boardData.items
+        ||
+        []
+    )
+        .forEach(
+            function (itemData) {
+
+                createItem(
+                    itemData.type,
+                    itemData.x,
+                    itemData.y,
+                    itemData
+                );
+
+            }
+        );
+
+
+
+    (
+        boardData.drawings
+        ||
+        []
+    )
+        .forEach(
+            function (drawingData) {
+
+                createDrawing(
+                    drawingData.type,
+                    drawingData.x1,
+                    drawingData.y1,
+                    drawingData.x2,
+                    drawingData.y2
+                );
+
+            }
+        );
+
+
+    clearSelections();
+
+
+    stopAdding();
+
+
+    selectedMessage.textContent =
+        message;
+
+}
+
+
+
+function openReadyTemplate(
+    templateId
+) {
+
+    const template =
+        readyBoardTemplates[
+            templateId
+        ];
+
+
+    if (
+        !template
+    ) {
+
+        selectedMessage.textContent =
+            "تعذر العثور على اللوحة الجاهزة";
+
+
+        return;
+
+    }
+
+
+    openBoardData(
+        template,
+        "تم فتح: " +
+        template.name
+    );
+
+}
+
+
+
+function openSavedBoard(
+    savedBoardId
+) {
+
+    const savedBoards =
+        JSON.parse(
+            localStorage.getItem(
+                "coachflowSavedBoards"
+            )
+        )
+        ||
+        [];
+
+
+    const savedBoard =
+        savedBoards.find(
+            function (board) {
+
+                return (
+                    String(
+                        board.id
+                    )
+                    ===
+                    String(
+                        savedBoardId
+                    )
+                );
+
+            }
+        );
+
+
+    if (
+        !savedBoard
+    ) {
+
+        selectedMessage.textContent =
+            "تعذر العثور على اللوحة المحفوظة";
+
+
+        return;
+
+    }
+
+
+    openBoardData(
+        savedBoard.data,
+        "تم فتح: " +
+        savedBoard.name
+    );
+
+}
+
+
+
+function loadBoard() {
+
+    const saved =
+        localStorage.getItem(
+            "coachflowFootballBoard"
+        );
+
+
+    if (
+        !saved
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const boardData =
+            JSON.parse(
+                saved
+            );
+
+
+        openBoardData(
+            boardData,
+            "تم تحميل آخر لوحة محفوظة"
+        );
+
+    }
+    catch (
+        error
+    ) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+
+/* ========================================
+   INITIAL BOARD
+======================================== */
+
+
+function loadInitialBoard() {
+
+    const parameters =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    let templateId =
+        parameters.get(
+            "template"
+        );
+
+
+    const formation =
+        parameters.get(
+            "formation"
+        );
+
+
+    const savedBoardId =
+        parameters.get(
+            "saved"
+        );
+
+
+    const aiGenerated =
+        parameters.get(
+            "ai"
+        );
+
+
+
+    if (
+        aiGenerated === "1"
+    ) {
+
+        const generated =
+            localStorage.getItem(
+                "coachflowAIGeneratedBoard"
+            );
+
+
+        if (
+            generated
+        ) {
+
+            try {
+
+                openBoardData(
+                    JSON.parse(
+                        generated
+                    ),
+                    "تم إنشاء اللوحة من المساعد الذكي ✨"
+                );
+
+
+                return;
+
+            }
+            catch (
+                error
+            ) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+
+    if (
+        !templateId
+        &&
+        formation
+    ) {
+
+        const formationNames = {
+
+            "433":
+                "formation-433",
+
+            "442":
+                "formation-442",
+
+            "4-3-3":
+                "formation-433",
+
+            "4-4-2":
+                "formation-442"
+
+        };
+
+
+        templateId =
+            formationNames[
+                formation
+            ];
+
+    }
+
+
+
+    if (
+        templateId
+    ) {
+
+        openReadyTemplate(
+            templateId
+        );
+
+
+        return;
+
+    }
+
+
+
+    if (
+        savedBoardId
+    ) {
+
+        openSavedBoard(
+            savedBoardId
+        );
+
+
+        return;
+
+    }
+
+
+
+    loadBoard();
+
+}
+
+
+
+/* ========================================
+   MOVEMENT SIMULATION
+======================================== */
+
+
+const recordMovementButton =
+    document.getElementById(
+        "recordMovementButton"
+    );
+
+
+const playSimulationButton =
+    document.getElementById(
+        "playSimulationButton"
+    );
+
+
+const resetSimulationButton =
+    document.getElementById(
+        "resetSimulationButton"
+    );
+
+
+const clearMovementsButton =
+    document.getElementById(
+        "clearMovementsButton"
+    );
+
+
+let movementRecords =
+    [];
+
+
+let recordingItem =
+    null;
+
+
+let recordingStart =
+    null;
+
+
+
+/* RECORD START */
+
+
+recordMovementButton.addEventListener(
+    "click",
+    function () {
+
+        if (
+            !selectedItem
+        ) {
+
+            alert(
+                "اختار لاعبًا أو كرة أو عنصرًا من الملعب أولًا."
+            );
+
+
+            return;
+
+        }
+
+
+        recordingItem =
+            selectedItem;
+
+
+        recordingStart = {
+
+            x:
+                parseFloat(
+                    recordingItem.style.left
+                ),
+
+            y:
+                parseFloat(
+                    recordingItem.style.top
+                )
+
+        };
+
+
+        recordMovementButton.classList.add(
+            "active-tool"
+        );
+
+
+        selectedMessage.textContent =
+            "🎬 اسحبي العنصر الآن إلى مكان النهاية";
+
+    }
+);
+
+
+
+/* RECORD END */
+
+
+pitch.addEventListener(
+    "pointerup",
+    function () {
+
+        if (
+            !recordingItem
+            ||
+            !recordingStart
+        ) {
+
+            return;
+
+        }
+
+
+        const currentItem =
+            recordingItem;
+
+
+        const start = {
+
+            x:
+                recordingStart.x,
+
+            y:
+                recordingStart.y
+
+        };
+
+
+        setTimeout(
+            function () {
+
+                const endX =
+                    parseFloat(
+                        currentItem.style.left
+                    );
+
+
+                const endY =
+                    parseFloat(
+                        currentItem.style.top
+                    );
+
+
+                if (
+                    isNaN(
+                        endX
+                    )
+                    ||
+                    isNaN(
+                        endY
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    Math.abs(
+                        endX
+                        -
+                        start.x
+                    ) < .5
+                    &&
+                    Math.abs(
+                        endY
+                        -
+                        start.y
+                    ) < .5
+                ) {
+
+                    selectedMessage.textContent =
+                        "حرّك العنصر إلى مكان مختلف";
+
+
+                    return;
+
+                }
+
+
+                movementRecords =
+                    movementRecords.filter(
+                        function (record) {
+
+                            return (
+                                record.item
+                                !==
+                                currentItem
+                            );
+
+                        }
+                    );
+
+
+                movementRecords.push({
+
+                    item:
+                        currentItem,
+
+                    startX:
+                        start.x,
+
+                    startY:
+                        start.y,
+
+                    endX:
+                        endX,
+
+                    endY:
+                        endY
+
+                });
+
+
+                currentItem.style.transition =
+                    "none";
+
+
+                currentItem.style.left =
+                    start.x + "%";
+
+
+                currentItem.style.top =
+                    start.y + "%";
+
+
+                recordingItem =
+                    null;
+
+
+                recordingStart =
+                    null;
+
+
+                recordMovementButton.classList.remove(
+                    "active-tool"
+                );
+
+
+                selectedMessage.textContent =
+                    "✅ تم تسجيل الحركة — يمكنك تسجيل حركة عنصر آخر";
+
+            },
+            150
+        );
+
+    }
+);
+
+
+
+/* PLAY */
+
+
+playSimulationButton.addEventListener(
+    "click",
+    function () {
+
+        if (
+            movementRecords.length === 0
+        ) {
+
+            alert(
+                "سجل حركة لاعب أو كرة أولًا."
+            );
+
+
+            return;
+
+        }
+
+
+        selectedMessage.textContent =
+            "▶ جاري تشغيل المحاكاة...";
+
+
+        movementRecords.forEach(
+            function (movement) {
+
+                movement.item.style.transition =
+                    "none";
+
+
+                movement.item.style.left =
+                    movement.startX
+                    +
+                    "%";
+
+
+                movement.item.style.top =
+                    movement.startY
+                    +
+                    "%";
+
+            }
+        );
+
+
+        void pitch.offsetWidth;
+
+
+        setTimeout(
+            function () {
+
+                movementRecords.forEach(
+                    function (movement) {
+
+                        movement.item.style.transition =
+                            "left 2.5s ease-in-out, top 2.5s ease-in-out";
+
+
+                        movement.item.style.left =
+                            movement.endX
+                            +
+                            "%";
+
+
+                        movement.item.style.top =
+                            movement.endY
+                            +
+                            "%";
+
+                    }
+                );
+
+
+                setTimeout(
+                    function () {
+
+                        selectedMessage.textContent =
+                            "✅ انتهت المحاكاة";
+
+                    },
+                    2600
+                );
+
+            },
+            120
+        );
+
+    }
+);
+
+
+
+/* RESET */
+
+
+resetSimulationButton.addEventListener(
+    "click",
+    function () {
+
+        if (
+            movementRecords.length === 0
+        ) {
+
+            alert(
+                "لا توجد حركة مسجلة."
+            );
+
+
+            return;
+
+        }
+
+
+        movementRecords.forEach(
+            function (movement) {
+
+                movement.item.style.transition =
+                    "none";
+
+
+                movement.item.style.left =
+                    movement.startX
+                    +
+                    "%";
+
+
+                movement.item.style.top =
+                    movement.startY
+                    +
+                    "%";
+
+            }
+        );
+
+
+        selectedMessage.textContent =
+            "↩ تم الرجوع إلى بداية التمرين";
+
+    }
+);
+
+
+
+/* CLEAR MOVEMENTS */
+
+
+clearMovementsButton.addEventListener(
+    "click",
+    function () {
+
+        if (
+            movementRecords.length === 0
+        ) {
+
+            alert(
+                "لا توجد حركات مسجلة."
+            );
+
+
+            return;
+
+        }
+
+
+        const confirmed =
+            confirm(
+                "هل تريد مسح جميع الحركات والبدء من جديد؟"
+            );
+
+
+        if (
+            !confirmed
+        ) {
+
+            return;
+
+        }
+
+
+        movementRecords.forEach(
+            function (movement) {
+
+                if (
+                    movement.item
+                    &&
+                    document.body.contains(
+                        movement.item
+                    )
+                ) {
+
+                    movement.item.style.transition =
+                        "none";
+
+
+                    movement.item.style.left =
+                        movement.startX
+                        +
+                        "%";
+
+
+                    movement.item.style.top =
+                        movement.startY
+                        +
+                        "%";
+
+                }
+
+            }
+        );
+
+
+        movementRecords =
+            [];
+
+
+        recordingItem =
+            null;
+
+
+        recordingStart =
+            null;
+
+
+        recordMovementButton.classList.remove(
+            "active-tool"
+        );
+
+
+        selectedMessage.textContent =
+            "🧹 تم مسح كل الحركات — يمكنك البدء من جديد";
+
+    }
+);
+
+
+
+/* ========================================
+   KEYBOARD
+======================================== */
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Delete"
+        ) {
+
+            if (
+                selectedItem
+                ||
+                selectedDrawing
+            ) {
+
+                deleteSelectedObject();
+
+            }
+
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            stopAdding();
+
+        }
+
+    }
+);
+
+
+
+/* ========================================
+   START
+======================================== */
+
+
+loadInitialBoard();
+    /* ========================================
+   MOBILE TOOLS DRAWER
+======================================== */
+
+const mobileToolsToggle =
+    document.getElementById("mobileToolsToggle");
+
+const mobileSidebar =
+    document.querySelector(".sidebar");
+
+const sidebarOverlay =
+    document.getElementById("sidebarOverlay");
+
+const closeSidebarButton =
+    document.getElementById("closeSidebarButton");
+
+
+function openMobileTools() {
+
+    mobileSidebar.classList.add("mobile-open");
+
+    sidebarOverlay.classList.add("visible");
+
+}
+
+
+function closeMobileTools() {
+
+    mobileSidebar.classList.remove("mobile-open");
+
+    sidebarOverlay.classList.remove("visible");
+
+}
+
+
+mobileToolsToggle.addEventListener(
+    "click",
+    function () {
+
+        openMobileTools();
+
+    }
+);
+
+
+closeSidebarButton.addEventListener(
+    "click",
+    function () {
+
+        closeMobileTools();
+
+    }
+);
+
+
+sidebarOverlay.addEventListener(
+    "click",
+    function () {
+
+        closeMobileTools();
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+
+            closeMobileTools();
+
+        }
+
+    }
+);
+
+</script>
+
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

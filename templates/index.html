@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DeTactica — منصة المدربين الذكية</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="container nav-content">
+
+        <a class="brand" href="{{ url_for('home') }}">
+
+            <span class="brand-icon">D</span>
+
+            <span>
+                De<span>Tactica</span>
+            </span>
+
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="#features">
+                المميزات
+            </a>
+
+            <a href="#tools">
+                الأدوات
+            </a>
+
+            <a href="#pricing">
+                الباقات
+            </a>
+
+        </nav>
+<div class="nav-actions">
+{% if current_user.is_authenticated %}
+
+    <a href="{{ url_for('dashboard') }}"
+       class="btn btn-primary dashboard-btn">
+        لوحة التحكم
+    </a>
+
+    <a href="{{ url_for('sport_details', slug='football') }}"
+       class="football-direct"
+       title="كرة القدم">
+        ⚽
+    </a>
+
+    <a href="{{ url_for('account') }}"
+       class="user-link">
+        أهلًا، {{ current_user.full_name }}
+    </a>
+
+{% else %}
+
+    <a href="{{ url_for('register') }}"
+       class="btn btn-primary">
+        ابدأ الآن
+    </a>
+
+    <a href="{{ url_for('login') }}"
+       class="btn btn-outline">
+        تسجيل الدخول
+    </a>
+
+{% endif %}
+
+
+        <button class="menu-button"
+                id="menuButton"
+                aria-label="فتح القائمة">
+
+            ☰
+
+        </button>
+
+    </div>
+
+
+    <div class="mobile-menu"
+         id="mobileMenu">
+
+        <a href="#features">
+            المميزات
+        </a>
+
+        <a href="#tools">
+            الأدوات
+        </a>
+
+        <a href="#pricing">
+            الباقات
+        </a>
+
+
+        {% if current_user.is_authenticated %}
+
+
+    <a href="{{ url_for('sport_details', slug='football') }}">
+        ⚽ كرة القدم
+    </a>
+
+    <a href="{{ url_for('dashboard') }}">
+        لوحة التحكم
+    </a>
+
+    <a href="{{ url_for('account') }}">
+        حسابي
+    </a>
+
+        {% else %}
+
+            <a href="{{ url_for('login') }}">
+                تسجيل الدخول
+            </a>
+
+            <a href="{{ url_for('register') }}">
+                ابدأ الآن
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-glow hero-glow-one"></div>
+
+        <div class="hero-glow hero-glow-two"></div>
+
+
+        <div class="container hero-grid">
+
+
+            <div class="hero-copy">
+
+                <span class="eyebrow">
+                    منصة المدرب المتكاملة
+                </span>
+
+
+                <h1>
+
+                    خطّط، درّب، وطوّر فريقك
+
+                    <span>
+                        بسهولة
+                    </span>
+
+                </h1>
+
+
+                <p>
+
+                    كل أدوات المدرب في مكان واحد:
+                    تمارين جاهزة، تشكيلات، إدارة فرق ولاعبين،
+                    لوحة تكتيكية تفاعلية، ومساعد ذكي يساعدك
+                    تجهّز حصتك بسرعة.
+
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a class="btn btn-outline btn-large"
+                       href="{{ url_for('dashboard') }}">
+
+                        شاهد لوحة التحكم
+
+                    </a>
+
+                </div>
+
+
+                <div class="trust-row">
+
+                    <span>
+                        ✓ سهل الاستخدام
+                    </span>
+
+                    <span>
+                        ✓ بدون خبرة تقنية
+                    </span>
+
+                    <span>
+                        ✓ مناسب لكل الرياضات
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 BOARD PREVIEW
+            ========================= -->
+
+            <div class="hero-visual">
+
+
+                <div class="board-window">
+
+
+                    <div class="window-top">
+
+                        <div class="window-dots">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+                        <span>
+                            لوحة التخطيط
+                        </span>
+
+                    </div>
+
+
+                    <div class="pitch">
+
+
+                        <div class="pitch-line center-line"></div>
+
+                        <div class="center-circle"></div>
+
+                        <div class="penalty penalty-left"></div>
+
+                        <div class="penalty penalty-right"></div>
+
+
+                        <span class="player orange p1">
+                            9
+                        </span>
+
+                        <span class="player orange p2">
+                            7
+                        </span>
+
+                        <span class="player orange p3">
+                            10
+                        </span>
+
+                        <span class="player blue p4">
+                            4
+                        </span>
+
+                        <span class="player blue p5">
+                            6
+                        </span>
+
+                        <span class="player blue p6">
+                            8
+                        </span>
+
+
+                        <span class="ball">
+                            ⚽
+                        </span>
+
+
+                        <svg class="movement-lines"
+                             viewBox="0 0 600 360"
+                             aria-hidden="true">
+
+
+                            <defs>
+
+
+                                <marker id="arrowOrange"
+                                        markerWidth="8"
+                                        markerHeight="8"
+                                        refX="6"
+                                        refY="4"
+                                        orient="auto">
+
+                                    <path d="M0,0 L8,4 L0,8 Z"
+                                          fill="#ff6b35"/>
+
+                                </marker>
+
+
+                                <marker id="arrowWhite"
+                                        markerWidth="8"
+                                        markerHeight="8"
+                                        refX="6"
+                                        refY="4"
+                                        orient="auto">
+
+                                    <path d="M0,0 L8,4 L0,8 Z"
+                                          fill="#ffffff"/>
+
+                                </marker>
+
+
+                            </defs>
+
+
+                            <path d="M150 250 C220 170, 280 160, 340 110"
+                                  class="move orange-line"
+                                  marker-end="url(#arrowOrange)"/>
+
+
+                            <path d="M430 250 C390 210, 350 205, 305 230"
+                                  class="move white-line"
+                                  marker-end="url(#arrowWhite)"/>
+
+
+                        </svg>
+
+
+                        <div class="board-toolbar">
+
+                            <button>
+                                ●
+                            </button>
+
+                            <button>
+                                ▲
+                            </button>
+
+                            <button>
+                                ⚽
+                            </button>
+
+                            <button>
+                                ↗
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="floating-card floating-card-one">
+
+                    <span class="floating-icon">
+                        ✓
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            الحصة جاهزة
+                        </strong>
+
+                        <small>
+                            تم حفظ الخطة بنجاح
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="floating-card floating-card-two">
+
+                    <span class="floating-icon">
+                        AI
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            اقتراح ذكي
+                        </strong>
+
+                        <small>
+                            تمرين مناسب لفريقك
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATS
+    ========================= -->
+
+    <section class="stats">
+
+        <div class="container stats-grid">
+
+            <div>
+
+                <strong>
+                    +500
+                </strong>
+
+                <span>
+                    تمرين جاهز
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    +40
+                </strong>
+
+                <span>
+                    تشكيلة وخطة
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    24/7
+                </strong>
+
+                <span>
+                    وصول للمنصة
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    100%
+                </strong>
+
+                <span>
+                    واجهة عربية بسيطة
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FEATURES
+    ========================= -->
+
+    <section class="section"
+             id="features">
+
+
+        <div class="container">
+
+
+            <div class="section-heading">
+
+                <span class="eyebrow dark">
+                    لماذا DeTactica؟
+                </span>
+
+
+                <h2>
+                    كل ما يحتاجه المدرب، بدون تعقيد
+                </h2>
+
+
+                <p>
+                    واجهة واضحة وسريعة، مصممة للمدربين
+                    وليس للمبرمجين.
+                </p>
+
+            </div>
+
+
+            <div class="features-grid">
+
+
+                <article class="feature-card">
+
+                    <span class="feature-icon">
+                        ▦
+                    </span>
+
+                    <h3>
+                        لوحة تكتيكية تفاعلية
+                    </h3>
+
+                    <p>
+                        حرّك اللاعبين، ارسم التحركات،
+                        وأضف الأدوات بسهولة.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <span class="feature-icon">
+                        ⚡
+                    </span>
+
+                    <h3>
+                        تمارين جاهزة
+                    </h3>
+
+                    <p>
+                        مكتبة كبيرة مصنفة حسب الهدف والعمر
+                        ومستوى اللاعبين.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <span class="feature-icon">
+                        👥
+                    </span>
+
+                    <h3>
+                        إدارة الفرق واللاعبين
+                    </h3>
+
+                    <p>
+                        احتفظ ببيانات الفرق، الحضور،
+                        الملاحظات، والتقييمات.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <span class="feature-icon">
+                        ✦
+                    </span>
+
+                    <h3>
+                        مساعد ذكي
+                    </h3>
+
+                    <p>
+                        يقترح الحصص والتمارين المناسبة
+                        بناءً على احتياجك.
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         TOOLS
+    ========================= -->
+
+    <section class="section tools-section"
+             id="tools">
+
+
+        <div class="container tools-grid">
+
+
+            <div>
+
+                <span class="eyebrow">
+                    من الفكرة للتنفيذ
+                </span>
+
+
+                <h2>
+                    جهّز حصتك كاملة في دقائق
+                </h2>
+
+
+                <p>
+
+                    افتح لوحة جديدة، اختار التمرين،
+                    رتب اللاعبين، واحفظ الحصة.
+
+                    كل خطوة واضحة ومباشرة.
+
+                </p>
+
+
+                <ul class="check-list">
+
+                    <li>
+                        قوالب جاهزة للحصص
+                    </li>
+
+                    <li>
+                        حفظ واسترجاع الخطط
+                    </li>
+
+                    <li>
+                        مشاركة الخطة مع فريقك
+                    </li>
+
+                    <li>
+                        تقارير ومتابعة الأداء
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- DASHBOARD PREVIEW -->
+
+            <div class="dashboard-preview">
+
+
+                <div class="preview-sidebar">
+
+                    <div class="mini-logo">
+                        D
+                    </div>
+
+                    <span class="active"></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                </div>
+
+
+                <div class="preview-main">
+
+
+                    <div class="preview-header">
+
+
+                        <div>
+
+                            <small>
+                                صباح الخير
+                            </small>
+
+                            <h3>
+                                أهلًا يا كابتن أحمد
+                            </h3>
+
+                        </div>
+
+
+                        <div class="avatar">
+                            أ
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="preview-cards">
+
+
+                        <div>
+
+                            <small>
+                                الحصص
+                            </small>
+
+                            <strong>
+                                24
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                اللاعبون
+                            </small>
+
+                            <strong>
+                                28
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                التمارين
+                            </small>
+
+                            <strong>
+                                156
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="preview-panel">
+
+
+                        <div class="panel-title">
+
+                            <strong>
+                                الحصص القادمة
+                            </strong>
+
+                            <span>
+                                هذا الأسبوع
+                            </span>
+
+                        </div>
+
+
+                        <div class="session-item">
+
+                            <span class="session-dot"></span>
+
+                            <div>
+
+                                <strong>
+                                    تمرين لياقة
+                                </strong>
+
+                                <small>
+                                    اليوم — 5:00 م
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="session-item">
+
+                            <span class="session-dot blue-dot"></span>
+
+                            <div>
+
+                                <strong>
+                                    مباراة ودية
+                                </strong>
+
+                                <small>
+                                    غدًا — 7:00 م
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         PRICING
+    ========================= -->
+
+    <section class="section pricing-section"
+             id="pricing">
+
+
+        <div class="container">
+
+
+            {% if current_user.is_authenticated and current_subscription %}
+
+
+                <div class="section-heading">
+
+
+                    <span class="eyebrow dark">
+                        اشتراكك
+                    </span>
+
+
+                    <h2>
+
+                        باقتك الحالية:
+
+                        {{ current_subscription.plan.name }}
+
+                    </h2>
+
+
+                    <p>
+
+                        حسابك مفعّل على باقة
+
+                        {{ current_subscription.plan.name }}،
+
+                        ويمكنك إدارة الاشتراك أو ترقيته
+                        في أي وقت.
+
+                    </p>
+
+
+                    <a class="btn btn-primary"
+                       href="{{ url_for('plans') }}">
+
+                        إدارة الاشتراك
+
+                    </a>
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="section-heading">
+
+
+                    <span class="eyebrow dark">
+                        الباقات
+                    </span>
+
+
+                    <h2>
+                        اختار الباقة المناسبة لك
+                    </h2>
+
+
+                    <p>
+                        ابدأ مجانًا، وطوّر حسابك في أي وقت.
+                    </p>
+
+
+                    <a class="btn btn-primary"
+                       href="{{ url_for('plans') }}">
+
+                        عرض الباقات
+
+                    </a>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+
+    <div class="container footer-content">
+
+
+        <a class="brand"
+           href="{{ url_for('home') }}">
+
+
+            <span class="brand-icon">
+                D
+            </span>
+
+
+            <span>
+                De<span>Tactica</span>
+            </span>
+
+
+        </a>
+
+
+        <p>
+            منصة ذكية تساعد المدربين على التخطيط
+            والتطوير وتحقيق نتائج أفضل.
+        </p>
+
+
+        <span>
+            © 2026 DeTactica
+        </span>
+
+
+    </div>
+
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+
+</html>

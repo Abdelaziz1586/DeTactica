@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مكتبة التمارين | DeTactica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f3f7f5;
+            color: #082d24;
+            font-family: "Tajawal", Arial, sans-serif;
+        }
+
+        .navbar {
+            background: #031f18;
+            padding: 18px 0;
+        }
+
+        .nav-container {
+            width: min(1200px, 92%);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 27px;
+            font-weight: 900;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #ff7043;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        .brand-name span {
+            color: #ff7043;
+        }
+
+        .back-btn {
+            padding: 11px 18px;
+            border-radius: 11px;
+            background: #ff7043;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .page {
+            width: min(1200px, 92%);
+            margin: auto;
+            padding: 45px 0 80px;
+        }
+
+        .hero {
+            padding: 38px;
+            margin-bottom: 30px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #08664d, #03382b);
+            color: white;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 7px 13px;
+            margin-bottom: 13px;
+            border-radius: 20px;
+            background: rgba(255,255,255,.12);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 40px;
+        }
+
+        .hero p {
+            max-width: 750px;
+            margin: 0;
+            color: #d2e5de;
+            line-height: 1.9;
+            font-size: 17px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 8px 28px rgba(0,0,0,.07);
+        }
+
+        .filters input,
+        .filters select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d5e0dc;
+            border-radius: 10px;
+            background: #f8faf9;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .filters input:focus,
+        .filters select:focus {
+            border-color: #ff7043;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 27px;
+        }
+
+        .exercise-count {
+            color: #6e7c77;
+            font-weight: 800;
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .exercise-card {
+            overflow: hidden;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            transition: .25s;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 17px 40px rgba(0,0,0,.12);
+        }
+
+        .exercise-cover {
+            height: 175px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #126246, #063d30);
+            color: white;
+            font-size: 65px;
+        }
+
+        .exercise-content {
+            padding: 21px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 13px;
+        }
+
+        .tag {
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #eef5f2;
+            color: #49635a;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .exercise-card h3 {
+            margin: 0 0 9px;
+            font-size: 21px;
+        }
+
+        .description {
+            min-height: 52px;
+            margin: 0 0 17px;
+            color: #687670;
+            line-height: 1.7;
+        }
+
+        .exercise-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            margin-bottom: 17px;
+        }
+
+        .info {
+            padding: 9px 4px;
+            border-radius: 9px;
+            background: #f4f7f6;
+            text-align: center;
+        }
+
+        .info small {
+            display: block;
+            margin-bottom: 3px;
+            color: #87928e;
+        }
+
+        .info strong {
+            font-size: 13px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .details-btn,
+        .board-btn {
+            flex: 1;
+            padding: 11px 8px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .details-btn {
+            background: #edf3f1;
+            color: #082d24;
+        }
+
+        .board-btn {
+            background: #ff7043;
+            color: white;
+        }
+
+        .board-btn:hover {
+            background: #f15e32;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 65px 20px;
+            border-radius: 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .empty-state .icon {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 60px;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 8px;
+        }
+
+        .empty-state p {
+            color: #71807b;
+        }
+
+        @media (max-width: 950px) {
+            .exercise-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .filters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .exercise-grid,
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            .hero {
+                padding: 27px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="{{ url_for('home') }}" class="brand">
+            <span class="brand-icon">D</span>
+
+            <span class="brand-name notranslate" translate="no">
+                De<span>Tactica</span>
+            </span>
+        </a>
+
+        <a href="{{ url_for('sport_details', slug='football') }}"
+           class="back-btn">
+            العودة لمركز كرة القدم
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <section class="hero">
+
+        <span class="hero-badge">
+            مكتبة المدرب
+        </span>
+
+        <h1>
+            🏃 مكتبة التمارين
+        </h1>
+
+        <p>
+            جميع التمارين التي يتم نشرها من لوحة الإدارة
+            ستظهر هنا تلقائيًا. اختر التمرين المناسب، شاهد
+            تفاصيله، ثم افتحه على اللوحة التكتيكية.
+        </p>
+
+    </section>
+
+
+    <section class="filters">
+
+        <input type="search"
+               id="searchInput"
+               placeholder="🔍 ابحث باسم التمرين...">
+
+        <select id="goalFilter">
+            <option value="">كل الأهداف</option>
+            <option value="تمرير">تمرير</option>
+            <option value="تسديد">تسديد</option>
+            <option value="استحواذ">استحواذ</option>
+            <option value="مراوغة">مراوغة</option>
+            <option value="لياقة">لياقة</option>
+            <option value="إحماء">إحماء</option>
+            <option value="دفاع">دفاع</option>
+            <option value="هجوم">هجوم</option>
+        </select>
+
+       <select id="ageFilter">
+    <option value="">كل الأعمار</option>
+    <option value="Kids">Kids</option>
+    <option value="براعم">براعم</option>
+    <option value="ناشئين">ناشئين</option>
+    <option value="شباب">شباب</option>
+    <option value="كبار">كبار</option>
+</select>
+
+        <select id="levelFilter">
+            <option value="">كل المستويات</option>
+            <option value="مبتدئ">مبتدئ</option>
+            <option value="متوسط">متوسط</option>
+            <option value="متقدم">متقدم</option>
+        </select>
+
+    </section>
+
+
+    <div class="section-heading">
+
+        <h2>
+            التمارين المتاحة
+        </h2>
+
+        <span class="exercise-count"
+              id="exerciseCount">
+            {{ exercises|length }} تمرين
+        </span>
+
+    </div>
+
+
+    <section class="exercise-grid"
+             id="exerciseGrid">
+
+        {% for exercise in exercises %}
+
+            <article class="exercise-card"
+                     data-title="{{ exercise.title or '' }}"
+                     data-goal="{{ exercise.goal or '' }}"
+                     data-age="{{ exercise.age_group or '' }}"
+                     data-level="{{ exercise.level or '' }}">
+
+                <div class="exercise-cover">
+                    ⚽
+                </div>
+
+                <div class="exercise-content">
+
+                    <div class="tags">
+
+                        {% if exercise.goal %}
+                            <span class="tag">
+                                {{ exercise.goal }}
+                            </span>
+                        {% endif %}
+
+                        {% if exercise.age_group %}
+                            <span class="tag">
+                                {{ exercise.age_group }}
+                            </span>
+                        {% endif %}
+
+                        {% if exercise.level %}
+                            <span class="tag">
+                                {{ exercise.level }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+
+                    <h3>
+                        {{ exercise.title }}
+                    </h3>
+
+
+                    <p class="description">
+                        {{ exercise.description }}
+                    </p>
+
+
+                    <div class="exercise-info">
+
+                        <div class="info">
+                            <small>اللاعبون</small>
+                            <strong>
+                                👥 {{ exercise.players_count or "غير محدد" }}
+                            </strong>
+                        </div>
+
+                        <div class="info">
+                            <small>المدة</small>
+                            <strong>
+                                ⏱ {{ exercise.duration_minutes or "—" }} د
+                            </strong>
+                        </div>
+
+                        <div class="info">
+                            <small>المستوى</small>
+                            <strong>
+                                {{ exercise.level or "عام" }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="actions">
+
+                        <a href="{{ url_for('exercise_details', exercise_id=exercise.id) }}"
+                           class="details-btn">
+                            التفاصيل
+                        </a>
+
+                        <a href="{{ url_for('exercise_board', exercise_id=exercise.id) }}"
+                           class="board-btn">
+                            فتح على اللوحة
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <span class="icon">
+                    🏃
+                </span>
+
+                <h3>
+                    لا توجد تمارين منشورة حتى الآن
+                </h3>
+
+                <p>
+                    عندما يضيف الأدمن تمرينًا جديدًا وينشره،
+                    سيظهر هنا تلقائيًا.
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const goalFilter =
+        document.getElementById("goalFilter");
+
+    const ageFilter =
+        document.getElementById("ageFilter");
+
+    const levelFilter =
+        document.getElementById("levelFilter");
+
+    const exerciseCount =
+        document.getElementById("exerciseCount");
+
+
+    function filterExercises() {
+
+        const search =
+            searchInput.value
+                .trim()
+                .toLowerCase();
+
+        const goal =
+            goalFilter.value;
+
+        const age =
+            ageFilter.value;
+
+        const level =
+            levelFilter.value;
+
+
+        const cards =
+            document.querySelectorAll(
+                ".exercise-card"
+            );
+
+
+        let count = 0;
+
+
+        cards.forEach(card => {
+
+            const title =
+                (
+                    card.dataset.title || ""
+                ).toLowerCase();
+
+            const cardGoal =
+                card.dataset.goal || "";
+
+            const cardAge =
+                card.dataset.age || "";
+
+            const cardLevel =
+                card.dataset.level || "";
+
+
+            const show =
+                (!search || title.includes(search))
+                &&
+                (!goal || cardGoal === goal)
+                &&
+                (!age || cardAge === age)
+                &&
+                (!level || cardLevel === level);
+
+
+            card.style.display =
+                show ? "" : "none";
+
+
+            if (show) {
+                count++;
+            }
+
+        });
+
+
+        exerciseCount.textContent =
+            count + " تمرين";
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterExercises
+    );
+
+    goalFilter.addEventListener(
+        "change",
+        filterExercises
+    );
+
+    ageFilter.addEventListener(
+        "change",
+        filterExercises
+    );
+
+    levelFilter.addEventListener(
+        "change",
+        filterExercises
+    );
+
+</script>
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

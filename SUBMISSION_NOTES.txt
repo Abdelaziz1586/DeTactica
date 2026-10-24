@@ -1,0 +1,10 @@
+DeTactica - Submission Ready
+
+- Original design and functionality preserved.
+- Brand unified as DeTactica.
+- Arabic/English language switching works across the site.
+- Arabic uses RTL; English uses LTR.
+- Tactical-board dynamic messages and dialogs are translated without changing board logic.
+- Fixed the exercise_details.html filename expected by app.py.
+- Language preference is saved for the signed-in user and current session.
+- Tested core routes, templates, registration, protected pages, and both language directions.

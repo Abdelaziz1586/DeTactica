@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>المساعد الذكي | DeTactica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #031f18;
+            color: white;
+            font-family: "Tajawal", Arial, sans-serif;
+        }
+
+        button,
+        select,
+        input,
+        a {
+            font-family: inherit;
+        }
+
+        .page {
+            width: min(1050px, 92%);
+            margin: auto;
+            padding: 30px 0 70px;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid #ff7043;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        .brand-name {
+            letter-spacing: 2px;
+        }
+
+        .back-button {
+            padding: 12px 20px;
+            border-radius: 12px;
+            background: #ff7043;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .assistant-card {
+            padding: 38px;
+            border-radius: 28px;
+            background: linear-gradient(
+                135deg,
+                rgba(8, 89, 66, 0.97),
+                rgba(4, 48, 37, 0.97)
+            );
+            box-shadow: 0 20px 55px rgba(0,0,0,.28);
+        }
+
+        .assistant-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            background: rgba(255,112,67,.15);
+            color: #ff9a79;
+            font-weight: 800;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: 42px;
+        }
+
+        .description {
+            max-width: 760px;
+            color: #c9ddd6;
+            font-size: 18px;
+            line-height: 1.9;
+            margin-bottom: 30px;
+        }
+
+        .form-box {
+            background: white;
+            color: #082d24;
+            padding: 30px;
+            border-radius: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .field {
+            text-align: right;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: 900;
+        }
+
+        .field select,
+        .field input {
+            width: 100%;
+            height: 55px;
+            padding: 0 15px;
+            border: 2px solid #dce8e3;
+            border-radius: 13px;
+            background: #fff;
+            color: #082d24;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .field select:focus,
+        .field input:focus {
+            border-color: #ff7043;
+        }
+
+        .generate-button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 16px;
+            border: none;
+            border-radius: 13px;
+            background: #ff7043;
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .generate-button:hover {
+            background: #f25e32;
+        }
+
+        /* RESULT */
+
+        .result-card {
+            display: none;
+            margin-top: 28px;
+            padding: 32px;
+            border-radius: 22px;
+            background: white;
+            color: #082d24;
+        }
+
+        .result-card h2 {
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        .result-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 18px 0 25px;
+        }
+
+        .meta {
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #edf5f2;
+            color: #31544a;
+            font-weight: 700;
+        }
+
+        .result-section {
+            margin-top: 25px;
+        }
+
+        .result-section h3 {
+            margin-bottom: 10px;
+            color: #082d24;
+        }
+
+        .result-section p {
+            color: #52645f;
+            line-height: 1.9;
+        }
+
+        .result-section ul,
+        .result-section ol {
+            padding-right: 25px;
+            color: #52645f;
+            line-height: 2;
+        }
+
+        .board-button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 16px;
+            border: none;
+            border-radius: 13px;
+            background: #0a513f;
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .board-button:hover {
+            background: #ff7043;
+        }
+
+        @media(max-width:700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back-button {
+                text-align: center;
+            }
+
+            .assistant-card {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="top-bar">
+
+        <a href="{{ url_for('home') }}" class="brand">
+            <span class="brand-icon">D</span>
+            <span class="brand-name">DeTactica</span>
+        </a>
+
+        <a href="{{ url_for('sport_details', slug='football') }}"
+           class="back-button">
+            العودة لكرة القدم
+        </a>
+
+    </div>
+
+
+    <section class="assistant-card">
+
+        <span class="assistant-badge">
+            ✨ DeTactica AI Coach
+        </span>
+
+        <h1>صمّم تمرينك الذكي</h1>
+
+        <p class="description">
+            اختر متطلبات الحصة التدريبية وسيقوم المساعد بتجهيز
+            اقتراح كامل للتمرين، ثم يمكنك فتح الإعداد مباشرة
+            على اللوحة التكتيكية والتعديل عليه.
+        </p>
+
+
+        <div class="form-box">
+
+            <div class="form-grid">
+
+                <!-- GOAL -->
+
+                <div class="field">
+                    <label>هدف التمرين</label>
+
+                    <select id="goal">
+                        <option value="possession">استحواذ</option>
+                        <option value="passing">تمرير</option>
+                        <option value="shooting">تسديد</option>
+                        <option value="dribbling">مراوغة</option>
+                        <option value="fitness">لياقة بدنية</option>
+                    </select>
+                </div>
+
+
+                <!-- AGE -->
+
+                <div class="field">
+                    <label>الفئة العمرية</label>
+
+                    <select id="age">
+                       <option value="Kids">Kids</option>
+<option value="براعم">براعم</option>
+<option value="ناشئين">ناشئين</option>
+<option value="شباب">شباب</option>
+<option value="فريق أول">فريق أول</option>
+                    </select>
+                </div>
+
+
+                <!-- PLAYERS -->
+
+                <div class="field">
+                    <label>عدد اللاعبين</label>
+
+                    <select id="players">
+                        <option value="6">6 لاعبين</option>
+                        <option value="8" selected>8 لاعبين</option>
+                        <option value="10">10 لاعبين</option>
+                        <option value="12">12 لاعبًا</option>
+                        <option value="16">16 لاعبًا</option>
+                    </select>
+                </div>
+
+
+                <!-- DURATION -->
+
+                <div class="field">
+                    <label>مدة التمرين</label>
+
+                    <select id="duration">
+                        <option value="10">10 دقائق</option>
+                        <option value="15" selected>15 دقيقة</option>
+                        <option value="20">20 دقيقة</option>
+                        <option value="30">30 دقيقة</option>
+                    </select>
+                </div>
+
+
+                <!-- LEVEL -->
+
+                <div class="field">
+                    <label>مستوى الصعوبة</label>
+
+                    <select id="level">
+                        <option value="سهل">سهل</option>
+                        <option value="متوسط" selected>متوسط</option>
+                        <option value="متقدم">متقدم</option>
+                    </select>
+                </div>
+
+
+                <!-- SPACE -->
+
+                <div class="field">
+                    <label>مساحة التدريب</label>
+
+                    <select id="space">
+                        <option value="صغيرة">مساحة صغيرة</option>
+                        <option value="متوسطة" selected>مساحة متوسطة</option>
+                        <option value="كبيرة">مساحة كبيرة</option>
+                    </select>
+                </div>
+
+
+                <!-- CONES -->
+
+                <div class="field">
+                    <label>عدد الأقماع</label>
+
+                    <select id="cones">
+                        <option value="0">بدون أقماع</option>
+                        <option value="4" selected>4 أقماع</option>
+                        <option value="6">6 أقماع</option>
+                        <option value="8">8 أقماع</option>
+                    </select>
+                </div>
+
+
+                <!-- BALLS -->
+
+                <div class="field">
+                    <label>عدد الكرات</label>
+
+                    <select id="balls">
+                        <option value="1" selected>كرة واحدة</option>
+                        <option value="2">كرتان</option>
+                        <option value="3">3 كرات</option>
+                        <option value="4">4 كرات</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <button type="button"
+                    class="generate-button"
+                    id="generateButton">
+
+                ✨ اطلب اقتراح التمرين
+
+            </button>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="result-card" id="resultCard">
+
+            <h2 id="exerciseTitle"></h2>
+
+            <div class="result-meta">
+
+                <span class="meta" id="resultPlayers"></span>
+
+                <span class="meta" id="resultDuration"></span>
+
+                <span class="meta" id="resultAge"></span>
+
+                <span class="meta" id="resultLevel"></span>
+
+            </div>
+
+
+            <div class="result-section">
+
+                <h3>🎯 هدف التمرين</h3>
+
+                <p id="exerciseGoal"></p>
+
+            </div>
+
+
+            <div class="result-section">
+
+                <h3>🧰 الأدوات المطلوبة</h3>
+
+                <ul id="equipmentList"></ul>
+
+            </div>
+
+
+            <div class="result-section">
+
+                <h3>👥 تقسيم اللاعبين</h3>
+
+                <p id="playersSetup"></p>
+
+            </div>
+
+
+            <div class="result-section">
+
+                <h3>📋 خطوات التنفيذ</h3>
+
+                <ol id="stepsList"></ol>
+
+            </div>
+
+
+            <button type="button"
+                    class="board-button"
+                    id="openBoardButton">
+
+                ⚽ افتح الإعداد على اللوحة
+
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+const generateButton =
+    document.getElementById("generateButton");
+
+const resultCard =
+    document.getElementById("resultCard");
+
+const openBoardButton =
+    document.getElementById("openBoardButton");
+
+let generatedBoard = null;
+
+
+/* ==============================
+   CREATE PLAYER
+============================== */
+
+function createPlayer(items, number, color, x, y) {
+
+    items.push({
+        type: "player",
+        number: number,
+        color: color,
+        x: x,
+        y: y
+    });
+
+}
+
+
+/* ==============================
+   BUILD BOARD
+============================== */
+
+function buildBoard(players, cones, balls, goal) {
+
+    const boardData = {
+        items: [],
+        drawings: []
+    };
+
+
+    const outerPositions = [
+        {x:25,y:25},
+        {x:25,y:75},
+        {x:75,y:25},
+        {x:75,y:75},
+        {x:50,y:18},
+        {x:50,y:82},
+        {x:18,y:50},
+        {x:82,y:50},
+        {x:35,y:35},
+        {x:65,y:65},
+        {x:35,y:65},
+        {x:65,y:35}
+    ];
+
+
+    /* POSSESSION */
+
+    if (goal === "possession") {
+
+        let defenders = 2;
+
+        if (players >= 12) {
+            defenders = 3;
+        }
+
+        const attackers = players - defenders;
+
+
+        for (let i = 0; i < attackers; i++) {
+
+            const p =
+                outerPositions[
+                    i % outerPositions.length
+                ];
+
+            createPlayer(
+                boardData.items,
+                i + 1,
+                "#2878d0",
+                p.x,
+                p.y
+            );
+        }
+
+
+        const defenderPositions = [
+            {x:45,y:45},
+            {x:55,y:55},
+            {x:55,y:45}
+        ];
+
+
+        for (let i = 0; i < defenders; i++) {
+
+            const p =
+                defenderPositions[i];
+
+            createPlayer(
+                boardData.items,
+                attackers + i + 1,
+                "#d63e3e",
+                p.x,
+                p.y
+            );
+        }
+
+    }
+
+
+    /* OTHER TRAINING TYPES */
+
+    else {
+
+        for (let i = 0; i < players; i++) {
+
+            const p =
+                outerPositions[
+                    i % outerPositions.length
+                ];
+
+            createPlayer(
+                boardData.items,
+                i + 1,
+                "#ff7043",
+                p.x,
+                p.y
+            );
+        }
+
+    }
+
+
+    /* CONES */
+
+    const conePositions = [
+        {x:18,y:18},
+        {x:82,y:18},
+        {x:18,y:82},
+        {x:82,y:82},
+        {x:50,y:15},
+        {x:50,y:85},
+        {x:15,y:50},
+        {x:85,y:50}
+    ];
+
+
+    for (let i = 0; i < cones; i++) {
+
+        const p =
+            conePositions[
+                i % conePositions.length
+            ];
+
+        boardData.items.push({
+            type: "cone-red",
+            x: p.x,
+            y: p.y
+        });
+
+    }
+
+
+    /* BALLS */
+
+    const ballPositions = [
+        {x:50,y:50},
+        {x:40,y:50},
+        {x:60,y:50},
+        {x:50,y:40}
+    ];
+
+
+    for (let i = 0; i < balls; i++) {
+
+        const p =
+            ballPositions[
+                i % ballPositions.length
+            ];
+
+        boardData.items.push({
+            type: "ball",
+            x: p.x,
+            y: p.y
+        });
+
+    }
+
+
+    return boardData;
+}
+
+
+/* ==============================
+   GENERATE EXERCISE
+============================== */
+
+generateButton.addEventListener("click", function() {
+
+    const goal =
+        document.getElementById("goal").value;
+
+    const age =
+        document.getElementById("age").value;
+
+    const players =
+        Number(
+            document.getElementById("players").value
+        );
+
+    const duration =
+        Number(
+            document.getElementById("duration").value
+        );
+
+    const level =
+        document.getElementById("level").value;
+
+    const space =
+        document.getElementById("space").value;
+
+    const cones =
+        Number(
+            document.getElementById("cones").value
+        );
+
+    const balls =
+        Number(
+            document.getElementById("balls").value
+        );
+
+
+    let title = "";
+    let goalText = "";
+    let setupText = "";
+    let steps = [];
+
+
+    /* POSSESSION */
+
+    if (goal === "possession") {
+
+        const defenders =
+            players >= 12 ? 3 : 2;
+
+        const attackers =
+            players - defenders;
+
+        title =
+            "تمرين الاستحواذ والضغط";
+
+        goalText =
+            "تطوير قدرة اللاعبين على الاحتفاظ بالكرة، " +
+            "وسرعة التمرير واتخاذ القرار تحت الضغط.";
+
+        setupText =
+            attackers +
+            " لاعبين للاستحواذ مقابل " +
+            defenders +
+            " لاعبين للضغط واستعادة الكرة.";
+
+        steps = [
+            "حدد مساحة التدريب باستخدام الأقماع ووزع اللاعبين داخلها.",
+
+            "يبدأ لاعبو الاستحواذ بتمرير الكرة بسرعة فيما بينهم مع التحرك المستمر.",
+
+            "يحاول اللاعبون الضاغطون استعادة الكرة أو إجبار الفريق على فقدانها.",
+
+            "عند فقدان الكرة يتم تبديل اللاعب الذي فقدها مع أحد لاعبي الضغط.",
+
+            "شجع اللاعبين على اللعب من لمسة أو لمستين وزيادة سرعة اتخاذ القرار."
+        ];
+
+    }
+
+
+    /* PASSING */
+
+    else if (goal === "passing") {
+
+        title =
+            "تمرين التمرير والتحرك";
+
+        goalText =
+            "تطوير دقة التمرير وسرعة التحرك بعد لعب الكرة والتواصل بين اللاعبين.";
+
+        setupText =
+            "قسّم اللاعبين إلى مجموعات صغيرة ووزعهم حول منطقة التدريب.";
+
+        steps = [
+            "وزع اللاعبين حول الأقماع مع وجود كرة لكل مجموعة.",
+
+            "يمرر اللاعب الكرة إلى زميله ثم يتحرك مباشرة إلى مكان جديد.",
+
+            "استمر في التمرير مع تغيير الاتجاه والحركة بدون كرة.",
+
+            "اطلب من اللاعبين زيادة سرعة التمرير تدريجيًا.",
+
+            "ركز على دقة التمريرة ووضع الجسم قبل استلام الكرة."
+        ];
+
+    }
+
+
+    /* SHOOTING */
+
+    else if (goal === "shooting") {
+
+        title =
+            "تمرين التسديد وإنهاء الهجمة";
+
+        goalText =
+            "تحسين دقة وقوة التسديد وسرعة إنهاء الهجمات.";
+
+        setupText =
+            "قسّم اللاعبين إلى مجموعات للهجوم والتجهيز والتسديد.";
+
+        steps = [
+            "ضع اللاعبين في مجموعات أمام منطقة التسديد.",
+
+            "يبدأ اللاعب بتمريرة قصيرة لزميله ثم يتحرك لاستلام الكرة.",
+
+            "يستلم اللاعب الكرة ويجهزها للتسديد.",
+
+            "يتم التسديد بسرعة مع التركيز على الدقة.",
+
+            "بدّل الأدوار بين اللاعبين بعد كل محاولة."
+        ];
+
+    }
+
+
+    /* DRIBBLING */
+
+    else if (goal === "dribbling") {
+
+        title =
+            "تمرين المراوغة والتحكم بالكرة";
+
+        goalText =
+            "تطوير التحكم بالكرة وتغيير الاتجاه والسرعة أثناء المراوغة.";
+
+        setupText =
+            "وزع اللاعبين على مسارات بين الأقماع.";
+
+        steps = [
+            "رتب الأقماع في مسارات داخل مساحة التدريب.",
+
+            "يبدأ كل لاعب بالتحرك بالكرة بين الأقماع.",
+
+            "اطلب تغيير القدم المستخدمة واتجاه الحركة.",
+
+            "زد سرعة التنفيذ تدريجيًا.",
+
+            "أضف منافسة زمنية بين اللاعبين في الجولة الأخيرة."
+        ];
+
+    }
+
+
+    /* FITNESS */
+
+    else {
+
+        title =
+            "تمرين اللياقة بالكرة";
+
+        goalText =
+            "رفع المعدل البدني مع دمج الجري والتحرك بالكرة.";
+
+        setupText =
+            "قسّم اللاعبين إلى مجموعات تعمل بالتناوب.";
+
+        steps = [
+            "حدد محطات التدريب باستخدام الأقماع.",
+
+            "يبدأ اللاعب بالجري بالكرة بين المحطات.",
+
+            "ينفذ تغيير اتجاه وسرعة عند كل قمع.",
+
+            "بعد انتهاء المسار يعود اللاعب إلى مجموعته.",
+
+            "كرر الجولات مع فترات راحة قصيرة بين كل جولة."
+        ];
+
+    }
+
+
+    /* DISPLAY RESULT */
+
+    document.getElementById(
+        "exerciseTitle"
+    ).textContent = title;
+
+
+    document.getElementById(
+        "resultPlayers"
+    ).textContent =
+        "👥 " + players + " لاعبين";
+
+
+    document.getElementById(
+        "resultDuration"
+    ).textContent =
+        "⏱ " + duration + " دقيقة";
+
+
+    document.getElementById(
+        "resultAge"
+    ).textContent =
+        "⚽ " + age;
+
+
+    document.getElementById(
+        "resultLevel"
+    ).textContent =
+        "📊 " + level;
+
+
+    document.getElementById(
+        "exerciseGoal"
+    ).textContent = goalText;
+
+
+    document.getElementById(
+        "playersSetup"
+    ).textContent = setupText;
+
+
+    /* EQUIPMENT */
+
+    const equipment =
+        document.getElementById(
+            "equipmentList"
+        );
+
+    equipment.innerHTML = "";
+
+    const equipmentItems = [
+        balls + " كرة",
+        cones + " أقماع",
+        "قمصان تدريب ملونة",
+        "مساحة تدريب " + space
+    ];
+
+    equipmentItems.forEach(function(item) {
+
+        const li =
+            document.createElement("li");
+
+        li.textContent = item;
+
+        equipment.appendChild(li);
+
+    });
+
+
+    /* STEPS */
+
+    const stepsList =
+        document.getElementById(
+            "stepsList"
+        );
+
+    stepsList.innerHTML = "";
+
+    steps.forEach(function(step) {
+
+        const li =
+            document.createElement("li");
+
+        li.textContent = step;
+
+        stepsList.appendChild(li);
+
+    });
+
+
+    generatedBoard =
+        buildBoard(
+            players,
+            cones,
+            balls,
+            goal
+        );
+
+
+    resultCard.style.display =
+        "block";
+
+
+    resultCard.scrollIntoView({
+        behavior: "smooth"
+    });
+
+});
+
+
+/* ==============================
+   OPEN DeTacticaL BOARD
+============================== */
+
+openBoardButton.addEventListener(
+    "click",
+    function() {
+
+        if (!generatedBoard) {
+            alert("اطلب اقتراح التمرين أولًا.");
+            return;
+        }
+
+
+        localStorage.setItem(
+            "coachflowAIGeneratedBoard",
+            JSON.stringify(generatedBoard)
+        );
+
+
+        window.location.href =
+            "{{ url_for('tactical_board') }}?ai=1";
+
+    }
+);
+
+</script>
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

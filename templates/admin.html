@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>لوحة الإدارة — DeTactica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="admin-body">
+
+<div class="admin-layout">
+
+    <!-- القائمة الجانبية -->
+    <aside class="admin-sidebar">
+
+        <a href="/" class="admin-logo">
+            <span class="admin-logo-icon">D</span>
+
+            <span>
+                DeTactica
+            </span>
+        </a>
+
+        <div class="admin-label">
+            لوحة الإدارة
+        </div>
+
+        <nav class="admin-menu">
+
+            <a href="/admin" class="admin-menu-link active">
+                <span>▦</span>
+                الرئيسية
+            </a>
+
+            <a href="#" class="admin-menu-link">
+                <span>🏃</span>
+                التمارين
+            </a>
+
+            <a href="#" class="admin-menu-link">
+                <span>⚽</span>
+                الرياضات
+            </a>
+
+            <a href="#" class="admin-menu-link">
+                <span>👥</span>
+                المستخدمون
+            </a>
+
+            <a href="#" class="admin-menu-link">
+                <span>💳</span>
+                الباقات
+            </a>
+
+            <a href="#" class="admin-menu-link">
+                <span>📊</span>
+                التقارير
+            </a>
+
+            <a href="#" class="admin-menu-link">
+                <span>⚙</span>
+                الإعدادات
+            </a>
+
+        </nav>
+
+        <a href="/" class="admin-back-link">
+            العودة إلى الموقع
+        </a>
+
+    </aside>
+
+    <!-- محتوى لوحة الإدارة -->
+    <main class="admin-main">
+
+        <header class="admin-header">
+
+            <div>
+                <p>مرحبًا بك</p>
+                <h1>لوحة إدارة DeTactica</h1>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>مدير النظام</strong>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- كروت الإحصائيات -->
+        <section class="admin-stats">
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-icon green">
+                    👥
+                </div>
+
+                <div>
+                    <span>المستخدمون</span>
+                    <strong>{{ users_count }}</strong>
+                    <small>إجمالي الحسابات</small>
+                </div>
+
+            </article>
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-icon orange">
+                    🏃
+                </div>
+
+                <div>
+                    <span>التمارين</span>
+                    <strong>{{ exercises_count }}</strong>
+                    <small>تمرين داخل المنصة</small>
+                </div>
+
+            </article>
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-icon blue">
+                    ⚽
+                </div>
+
+                <div>
+                    <span>الرياضات</span>
+                    <strong>{{ sports_count }}</strong>
+                    <small>رياضة مضافة</small>
+                </div>
+
+            </article>
+
+            <article class="admin-stat-card">
+
+                <div class="admin-stat-icon purple">
+                    💳
+                </div>
+
+                <div>
+                    <span>الباقات</span>
+                    <strong>{{ plans_count }}</strong>
+                    <small>باقة اشتراك</small>
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- الاختصارات -->
+        <section class="admin-section">
+
+            <div class="admin-section-header">
+
+                <div>
+                    <h2>إجراءات سريعة</h2>
+                    <p>إدارة أهم أجزاء المنصة بسهولة</p>
+                </div>
+
+            </div>
+
+            <div class="admin-quick-grid">
+
+                <a href="#" class="admin-quick-card">
+
+                    <span class="admin-quick-icon">
+                        ＋
+                    </span>
+
+                    <div>
+                        <h3>إضافة تمرين</h3>
+                        <p>ارفع تمرينًا جديدًا بصورة أو فيديو.</p>
+                    </div>
+
+                </a>
+
+                <a href="#" class="admin-quick-card">
+
+                    <span class="admin-quick-icon">
+                        ⚽
+                    </span>
+
+                    <div>
+                        <h3>إضافة رياضة</h3>
+                        <p>أضف قسمًا رياضيًا جديدًا للمنصة.</p>
+                    </div>
+
+                </a>
+
+                <a href="#" class="admin-quick-card">
+
+                    <span class="admin-quick-icon">
+                        💳
+                    </span>
+
+                    <div>
+                        <h3>إدارة الباقات</h3>
+                        <p>عدّل الأسعار ومميزات الاشتراكات.</p>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+        <div class="admin-content-grid">
+
+            <!-- أحدث المستخدمين -->
+            <section class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <div>
+                        <h2>أحدث المستخدمين</h2>
+                        <p>آخر الحسابات المسجلة</p>
+                    </div>
+
+                    <a href="#">
+                        عرض الجميع
+                    </a>
+
+                </div>
+
+                {% if latest_users %}
+
+                    <div class="admin-table-wrap">
+
+                        <table class="admin-table">
+
+                            <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>البريد</th>
+                                <th>الصلاحية</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            {% for user in latest_users %}
+
+                                <tr>
+                                    <td>{{ user.full_name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.phone or "—" }}</td>
+
+                                    <td>
+                                        <span class="admin-status">
+                                            {{ user.role }}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="admin-empty">
+                        لا يوجد مستخدمون حتى الآن.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            <!-- أحدث التمارين -->
+            <section class="admin-panel">
+
+                <div class="admin-panel-header">
+
+                    <div>
+                        <h2>أحدث التمارين</h2>
+                        <p>آخر التمارين المضافة</p>
+                    </div>
+
+                    <a href="#">
+                        عرض الجميع
+                    </a>
+
+                </div>
+
+                {% if latest_exercises %}
+
+                    <div class="admin-exercise-list">
+
+                        {% for exercise in latest_exercises %}
+
+                            <div class="admin-exercise-item">
+
+                                <div class="admin-exercise-icon">
+                                    🏃
+                                </div>
+
+                                <div>
+                                    <strong>{{ exercise.title }}</strong>
+
+                                    <span>
+                                        {{ exercise.category or "بدون تصنيف" }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="admin-empty">
+                        لا توجد تمارين حتى الآن.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

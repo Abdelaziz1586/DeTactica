@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>تعديل التمرين | DeTactica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f2f6f4;
+            color: #082d24;
+            font-family: "Tajawal", Arial, sans-serif;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #031f18;
+            color: white;
+            padding: 17px 0;
+        }
+
+        .nav-container {
+            width: min(1100px, 92%);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 27px;
+            font-weight: 900;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #ff7043;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        .brand-name span {
+            color: #ff7043;
+        }
+
+        .admin-badge {
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: rgba(255,255,255,.10);
+            color: #d3e4de;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .back-button {
+            padding: 11px 18px;
+            border-radius: 11px;
+            background: #ff7043;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        /* PAGE */
+
+        .page {
+            width: min(1050px, 92%);
+            margin: auto;
+            padding: 45px 0 80px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header > span {
+            display: inline-block;
+            margin-bottom: 8px;
+            color: #ff7043;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 36px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7974;
+            line-height: 1.8;
+        }
+
+        /* ALERT */
+
+        .alert {
+            margin-bottom: 20px;
+            padding: 13px 16px;
+            border-radius: 11px;
+            font-weight: 700;
+        }
+
+        .alert.success {
+            background: #dcf5eb;
+            color: #087759;
+        }
+
+        .alert.error {
+            background: #ffe4e4;
+            color: #a52e2e;
+        }
+
+        /* FORM */
+
+        .form-card {
+            padding: 30px;
+            border-radius: 22px;
+            background: white;
+            box-shadow: 0 12px 35px rgba(0,0,0,.08);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e5ece9;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .section-title {
+            margin: 0 0 18px;
+            font-size: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            color: #163d33;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .required {
+            color: #e64646;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d4dfdb;
+            border-radius: 11px;
+            background: #f9fbfa;
+            color: #082d24;
+            font-size: 15px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #ff7043;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255,112,67,.10);
+        }
+
+        .field-hint {
+            color: #89938f;
+            font-size: 12px;
+        }
+
+        /* PUBLISH */
+
+        .publish-box {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 17px;
+            border-radius: 13px;
+            background: #eef8f4;
+            border: 1px solid #d1e9df;
+            cursor: pointer;
+        }
+
+        .publish-box input {
+            width: 20px;
+            height: 20px;
+            accent-color: #159471;
+        }
+
+        .publish-text strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .publish-text small {
+            color: #687b74;
+        }
+
+        /* ACTIONS */
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .right-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 11px;
+            background: #ff7043;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .save-button:hover {
+            background: #f15e32;
+        }
+
+        .cancel-button {
+            padding: 13px 22px;
+            border-radius: 11px;
+            background: #edf2f0;
+            color: #082d24;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .view-button {
+            padding: 13px 20px;
+            border-radius: 11px;
+            background: #082d24;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .nav-container {
+                flex-direction: column;
+            }
+
+            .form-actions,
+            .right-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .save-button,
+            .cancel-button,
+            .view-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="{{ url_for('home') }}"
+           class="brand">
+
+            <span class="brand-icon">D</span>
+
+            <span class="brand-name notranslate" translate="no">
+                De<span>Tactica</span>
+            </span>
+
+            <span class="admin-badge">
+                ADMIN
+            </span>
+
+        </a>
+
+        <a href="{{ url_for('admin_exercises') }}"
+           class="back-button">
+            العودة لإدارة التمارين
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <div class="page-header">
+
+        <span>
+            إدارة المحتوى
+        </span>
+
+        <h1>
+            تعديل التمرين
+        </h1>
+
+        <p>
+            عدّل بيانات
+            <strong>{{ exercise.title }}</strong>
+            ثم احفظ التغييرات.
+        </p>
+
+    </div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <form method="POST"
+          class="form-card">
+
+
+        <!-- BASIC -->
+
+        <section class="form-section">
+
+            <h2 class="section-title">
+                📝 البيانات الأساسية
+            </h2>
+
+            <div class="form-grid">
+
+
+                <div class="form-group full">
+
+                    <label for="title">
+                        اسم التمرين
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ exercise.title }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="sport_id">
+                        الرياضة
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="sport_id"
+                        name="sport_id"
+                        required
+                    >
+
+                        {% for sport in sports %}
+
+                            <option
+                                value="{{ sport.id }}"
+                                {% if exercise.sport_id == sport.id %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ sport.icon }}
+                                {{ sport.name_en if current_language == 'en' else sport.name_ar }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="category">
+                        التصنيف
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                    >
+
+                        <option value="">
+                            اختر التصنيف
+                        </option>
+
+                        <option value="مهاري"
+                            {% if exercise.category == "مهاري" %}selected{% endif %}>
+                            مهاري
+                        </option>
+
+                        <option value="تكتيكي"
+                            {% if exercise.category == "تكتيكي" %}selected{% endif %}>
+                            تكتيكي
+                        </option>
+
+                        <option value="بدني"
+                            {% if exercise.category == "بدني" %}selected{% endif %}>
+                            بدني
+                        </option>
+
+                        <option value="إحماء"
+                            {% if exercise.category == "إحماء" %}selected{% endif %}>
+                            إحماء
+                        </option>
+
+                        <option value="دفاعي"
+                            {% if exercise.category == "دفاعي" %}selected{% endif %}>
+                            دفاعي
+                        </option>
+
+                        <option value="هجومي"
+                            {% if exercise.category == "هجومي" %}selected{% endif %}>
+                            هجومي
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label for="description">
+                        وصف وشرح التمرين
+                        <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        required
+                    >{{ exercise.description }}</textarea>
+
+                    <span class="field-hint">
+                        يمكنك تعديل خطوات تنفيذ التمرين بالكامل من هنا.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TRAINING -->
+
+        <section class="form-section">
+
+            <h2 class="section-title">
+                ⚽ تفاصيل التمرين
+            </h2>
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label for="goal">
+                        هدف التمرين
+                    </label>
+
+                    <select
+                        id="goal"
+                        name="goal"
+                    >
+
+                        <option value="">
+                            اختر الهدف
+                        </option>
+
+                        {% set goals = [
+                            "تمرير",
+                            "استحواذ",
+                            "تسديد",
+                            "مراوغة",
+                            "لياقة",
+                            "إحماء",
+                            "دفاع",
+                            "هجوم",
+                            "ضغط",
+                            "تحولات"
+                        ] %}
+
+                        {% for goal in goals %}
+
+                            <option
+                                value="{{ goal }}"
+                                {% if exercise.goal == goal %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ goal }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="level">
+                        المستوى
+                    </label>
+
+                    <select
+                        id="level"
+                        name="level"
+                    >
+
+                        <option value="">
+                            اختر المستوى
+                        </option>
+
+                        {% for level in ["مبتدئ", "متوسط", "متقدم"] %}
+
+                            <option
+                                value="{{ level }}"
+                                {% if exercise.level == level %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ level }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="age_group">
+                        الفئة العمرية
+                    </label>
+
+                    <select
+                        id="age_group"
+                        name="age_group"
+                    >
+
+                        <option value="">
+                            اختر الفئة العمرية
+                        </option>
+
+                        {% for age in ["براعم", "ناشئين", "شباب", "كبار"] %}
+
+                            <option
+                                value="{{ age }}"
+                                {% if exercise.age_group == age %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ age }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="players_count">
+                        عدد اللاعبين
+                    </label>
+
+                    <input
+                        type="text"
+                        id="players_count"
+                        name="players_count"
+                        value="{{ exercise.players_count or '' }}"
+                        placeholder="مثال: 8 - 12"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="duration_minutes">
+                        مدة التمرين بالدقائق
+                    </label>
+
+                    <input
+                        type="number"
+                        id="duration_minutes"
+                        name="duration_minutes"
+                        min="1"
+                        max="300"
+                        value="{{ exercise.duration_minutes or '' }}"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="equipment">
+                        الأدوات المطلوبة
+                    </label>
+
+                    <input
+                        type="text"
+                        id="equipment"
+                        name="equipment"
+                        value="{{ exercise.equipment or '' }}"
+                        placeholder="كرات، أقماع، حواجز..."
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MEDIA -->
+
+        <section class="form-section">
+
+            <h2 class="section-title">
+                🎥 الصور والفيديو
+            </h2>
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label for="image_filename">
+                        اسم ملف الصورة
+                    </label>
+
+                    <input
+                        type="text"
+                        id="image_filename"
+                        name="image_filename"
+                        value="{{ exercise.image_filename or '' }}"
+                        placeholder="مثال: passing-drill.jpg"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="video_url">
+                        رابط فيديو التمرين
+                    </label>
+
+                    <input
+                        type="url"
+                        id="video_url"
+                        name="video_url"
+                        value="{{ exercise.video_url or '' }}"
+                        placeholder="https://..."
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PUBLISH -->
+
+        <section class="form-section">
+
+            <h2 class="section-title">
+                🌐 حالة النشر
+            </h2>
+
+            <label class="publish-box">
+
+                <input
+                    type="checkbox"
+                    name="is_published"
+                    {% if exercise.is_published %}
+                        checked
+                    {% endif %}
+                >
+
+                <span class="publish-text">
+
+                    <strong>
+                        نشر التمرين في المكتبة
+                    </strong>
+
+                    <small>
+                        إذا ألغيت الاختيار سيظل التمرين محفوظًا
+                        في لوحة الأدمن لكنه لن يظهر للمستخدمين.
+                    </small>
+
+                </span>
+
+            </label>
+
+        </section>
+
+
+        <!-- ACTIONS -->
+
+        <div class="form-actions">
+
+            {% if exercise.is_published %}
+
+                <a href="{{ url_for('exercise_details', exercise_id=exercise.id) }}"
+                   class="view-button">
+                    👁 مشاهدة التمرين
+                </a>
+
+            {% else %}
+
+                <span></span>
+
+            {% endif %}
+
+
+            <div class="right-actions">
+
+                <a href="{{ url_for('admin_exercises') }}"
+                   class="cancel-button">
+                    إلغاء
+                </a>
+
+                <button type="submit"
+                        class="save-button">
+                    ✓ حفظ التعديلات
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</main>
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+</html>

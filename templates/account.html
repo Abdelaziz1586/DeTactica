@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+<html
+    lang="{{ user.language if user.language else 'ar' }}"
+    dir="{{ 'ltr' if user.language == 'en' else 'rtl' }}"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ t("my_account") }} | DeTactica</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <style>
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f3f7f5;
+            font-family: Arial, sans-serif;
+            color: #082d24;
+        }
+
+
+        .account-page {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+
+        .account-header {
+            background: #062c23;
+            color: white;
+            padding: 35px;
+            border-radius: 24px;
+            margin-bottom: 25px;
+        }
+
+
+        .account-header h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+
+        .account-header p {
+            margin: 0;
+            color: #c3d8d1;
+        }
+
+
+        .account-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 20px;
+        }
+
+
+        .account-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,.08);
+        }
+
+
+        .account-card h2 {
+            margin-top: 0;
+        }
+
+
+        .account-info {
+            color: #555;
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+
+
+        .plan-name {
+            display: inline-block;
+
+            background: #e8fff5;
+            color: #08795b;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+
+        .account-button {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 12px 20px;
+
+            border: 0;
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: white;
+            background: #ff7145;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            font-family: inherit;
+        }
+
+
+        .account-button:hover {
+            background: #f15d31;
+        }
+
+
+        .secondary-button {
+            background: #082d24;
+        }
+
+
+        .secondary-button:hover {
+            background: #0d4638;
+        }
+
+
+        .logout-button {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 12px 20px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: white;
+            background: #d93838;
+
+            font-weight: bold;
+        }
+
+
+        .logout-button:hover {
+            background: #b92727;
+        }
+
+
+
+        .account-brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            color: #082d24;
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: 900;
+        }
+        .account-brand-icon {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #ff7145;
+            border-left-color: transparent;
+            border-radius: 50%;
+        }
+
+        /* =====================================
+           LANGUAGE
+        ===================================== */
+
+        .language-form {
+            margin-top: 18px;
+        }
+
+
+        .language-options {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 15px;
+        }
+
+
+        .language-option {
+            position: relative;
+            cursor: pointer;
+        }
+
+
+        .language-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+
+        .language-box {
+            min-height: 75px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 9px;
+
+            padding: 12px;
+
+            border: 2px solid #dce8e3;
+            border-radius: 14px;
+
+            background: #f8fbfa;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            transition: .2s ease;
+        }
+
+
+        .language-option input:checked + .language-box {
+            border-color: #ff7145;
+
+            background: #fff2ed;
+
+            color: #d95027;
+
+            box-shadow:
+                0 5px 16px rgba(255,113,69,.12);
+        }
+
+
+        .language-flag {
+            font-size: 23px;
+        }
+
+
+        .language-save {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 700px) {
+
+            .account-page {
+                margin: 20px auto;
+                padding: 12px;
+            }
+
+
+            .account-header {
+                padding: 24px 20px;
+                border-radius: 18px;
+            }
+
+
+            .account-header h1 {
+                font-size: 26px;
+            }
+
+
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .account-card {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+
+            .language-options {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="account-page">
+
+    <a href="{{ url_for('home') }}" class="account-brand-link notranslate" translate="no">
+        <span class="account-brand-icon">D</span>
+        <span>DeTactica</span>
+    </a>
+
+
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <div class="account-header">
+
+        <h1>
+            {{ t("welcome") }}, {{ user.full_name }}
+        </h1>
+
+        <p>
+            {{ t("account_management") }}
+        </p>
+
+    </div>
+
+
+    <div class="account-grid">
+
+
+        <!-- =====================================
+             ACCOUNT DATA
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                👤 {{ t("account_information") }}
+            </h2>
+
+
+            <p class="account-info">
+
+                <strong>
+                    {{ t("name") }}:
+                </strong>
+
+                {{ user.full_name }}
+
+            </p>
+
+
+            <p class="account-info">
+
+                <strong>
+                    {{ t("email") }}:
+                </strong>
+
+                {{ user.email }}
+
+            </p>
+
+        </div>
+
+
+        <!-- =====================================
+             SUBSCRIPTION
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                📦 {{ t("current_subscription") }}
+            </h2>
+
+
+            {% if current_subscription %}
+
+
+                <span class="plan-name">
+
+                    {{ current_subscription.plan.name }}
+
+                </span>
+
+
+                <p class="account-info">
+
+                    <strong>
+                        {{ t("price") }}:
+                    </strong>
+
+
+                    {% if current_subscription.plan.price == 0 %}
+
+                        {{ t("free") }}
+
+                    {% else %}
+
+                        {{ current_subscription.plan.price|int }}
+
+                        {% if user.language == 'en' %}
+
+                            EGP / {{ t("month") }}
+
+                        {% else %}
+
+                            جنيه / {{ t("month") }}
+
+                        {% endif %}
+
+                    {% endif %}
+
+                </p>
+
+
+                <p class="account-info">
+
+                    <strong>
+                        {{ t("duration_days") }}:
+                    </strong>
+
+                    {{ current_subscription.plan.duration_days }}
+
+                    {{ t("day") }}
+
+                </p>
+
+
+                <p class="account-info">
+
+                    <strong>
+                        {{ t("status") }}:
+                    </strong>
+
+
+                    {% if current_subscription.status == "active" %}
+
+                        🟢 {{ t("active") }}
+
+                    {% else %}
+
+                        🔴 {{ t("inactive") }}
+
+                    {% endif %}
+
+                </p>
+
+
+                {% if current_subscription.end_date %}
+
+                    <p class="account-info">
+
+                        <strong>
+
+                            {% if user.language == 'en' %}
+                                Ends on:
+                            {% else %}
+                                ينتهي في:
+                            {% endif %}
+
+                        </strong>
+
+
+                        {{
+                            current_subscription.end_date.strftime(
+                                '%d-%m-%Y'
+                            )
+                        }}
+
+                    </p>
+
+                {% endif %}
+
+
+            {% else %}
+
+
+                <span class="plan-name">
+
+                    {{ t("no_subscription") }}
+
+                </span>
+
+
+                <p class="account-info">
+
+                    {{ t("no_subscription_text") }}
+
+                </p>
+
+
+            {% endif %}
+
+
+            <a
+                href="{{ url_for('plans') }}"
+                class="account-button"
+            >
+
+                {{ t("change_plan") }}
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================
+             LANGUAGE
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                🌐 {{ t("language") }}
+            </h2>
+
+
+            <p class="account-info">
+
+                {{ t("choose_language") }}
+
+            </p>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('change_language') }}"
+                class="language-form"
+            >
+
+
+                <div class="language-options">
+
+
+                    <!-- ARABIC -->
+
+                    <label class="language-option">
+
+                        <input
+                            type="radio"
+                            name="language"
+                            value="ar"
+
+                            {% if user.language != 'en' %}
+                                checked
+                            {% endif %}
+                        >
+
+
+                        <span class="language-box">
+
+                            <span class="language-flag">
+                                🇪🇬
+                            </span>
+
+                            {{ t("arabic") }}
+
+                        </span>
+
+                    </label>
+
+
+                    <!-- ENGLISH -->
+
+                    <label class="language-option">
+
+                        <input
+                            type="radio"
+                            name="language"
+                            value="en"
+
+                            {% if user.language == 'en' %}
+                                checked
+                            {% endif %}
+                        >
+
+
+                        <span class="language-box">
+
+                            <span class="language-flag">
+                                🇬🇧
+                            </span>
+
+                            {{ t("english") }}
+
+                        </span>
+
+                    </label>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="account-button language-save"
+                >
+
+                    {{ t("save_language") }}
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- =====================================
+             EXERCISES
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                🏋️ {{ t("my_exercises") }}
+            </h2>
+
+
+            <p class="account-info">
+
+                {{ t("my_exercises_text") }}
+
+            </p>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="account-button secondary-button"
+            >
+
+                {{ t("dashboard") }}
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================
+             PAYMENT
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                💳 {{ t("payment") }}
+            </h2>
+
+
+            <p class="account-info">
+
+                {{ t("no_payment_method") }}
+
+            </p>
+
+
+            <p class="account-info">
+
+                {{ t("payment_history") }}
+
+            </p>
+
+        </div>
+
+
+        <!-- =====================================
+             BACK HOME
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                🏠 {{ t("home") }}
+            </h2>
+
+
+            <p class="account-info">
+
+                {% if user.language == 'en' %}
+
+                    Return to the DeTactica home page.
+
+                {% else %}
+
+                    العودة إلى الصفحة الرئيسية لـ DeTactica.
+
+                {% endif %}
+
+            </p>
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="account-button secondary-button"
+            >
+
+                {{ t("back_home") }}
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================
+             LOGOUT
+        ====================================== -->
+
+        <div class="account-card">
+
+            <h2>
+                🚪 {{ t("logout_account") }}
+            </h2>
+
+
+            <p class="account-info">
+
+                {{ t("logout_text") }}
+
+            </p>
+
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="logout-button"
+            >
+
+                {{ t("logout") }}
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+
+</html>

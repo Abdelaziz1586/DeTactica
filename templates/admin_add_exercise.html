@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}" dir="{{ 'rtl' if current_language == 'ar' else 'ltr' }}">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>إضافة تمرين جديد | DeTactica</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            background: #f2f6f4;
+
+            color: #082d24;
+
+            font-family:
+                "Tajawal",
+                Arial,
+                sans-serif;
+
+        }
+
+
+        button,
+        input,
+        select,
+        textarea {
+
+            font-family: inherit;
+
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            background: #031f18;
+
+            color: white;
+
+            padding: 17px 0;
+
+        }
+
+
+        .nav-container {
+
+            width: min(1200px, 92%);
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 27px;
+
+            font-weight: 900;
+
+        }
+
+
+        .brand-icon {
+
+            width: 44px;
+
+            height: 44px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border: 5px solid #ff7043;
+
+            border-left-color: transparent;
+
+            border-radius: 50%;
+
+        }
+
+
+        .brand-name span {
+
+            color: #ff7043;
+
+        }
+
+
+        .admin-badge {
+
+            padding: 7px 12px;
+
+            margin-right: 5px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,.1);
+
+            color: #cce0d9;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+        }
+
+
+        .back-button {
+
+            display: inline-block;
+
+            padding: 11px 18px;
+
+            border-radius: 11px;
+
+            background: #ff7043;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+            transition: .2s;
+
+        }
+
+
+        .back-button:hover {
+
+            background: #f15e32;
+
+            transform: translateY(-2px);
+
+        }
+
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page {
+
+            width: min(1050px, 92%);
+
+            margin: auto;
+
+            padding: 45px 0 80px;
+
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .page-header {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .page-header span {
+
+            display: inline-block;
+
+            margin-bottom: 8px;
+
+            color: #ff7043;
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+        }
+
+
+        .page-header h1 {
+
+            margin: 0 0 8px;
+
+            font-size: 36px;
+
+        }
+
+
+        .page-header p {
+
+            margin: 0;
+
+            color: #6b7974;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+        }
+
+
+        /* =========================
+           ALERTS
+        ========================= */
+
+        .alert {
+
+            margin-bottom: 20px;
+
+            padding: 13px 16px;
+
+            border-radius: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .alert.success {
+
+            background: #dcf5eb;
+
+            color: #087759;
+
+        }
+
+
+        .alert.error {
+
+            background: #ffe4e4;
+
+            color: #a52e2e;
+
+        }
+
+
+        /* =========================
+           FORM CARD
+        ========================= */
+
+        .form-card {
+
+            padding: 30px;
+
+            border-radius: 22px;
+
+            background: white;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,.08);
+
+        }
+
+
+        .form-section {
+
+            margin-bottom: 30px;
+
+            padding-bottom: 25px;
+
+            border-bottom:
+                1px solid #e5ece9;
+
+        }
+
+
+        .form-section:last-of-type {
+
+            margin-bottom: 15px;
+
+            padding-bottom: 0;
+
+            border-bottom: none;
+
+        }
+
+
+        .section-title {
+
+            margin: 0 0 18px;
+
+            font-size: 20px;
+
+        }
+
+
+        .section-title span {
+
+            margin-left: 7px;
+
+        }
+
+
+        /* =========================
+           FORM GRID
+        ========================= */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+        }
+
+
+        .form-group.full {
+
+            grid-column: 1 / -1;
+
+        }
+
+
+        .form-group label {
+
+            color: #163d33;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+        }
+
+
+        .required {
+
+            color: #e64646;
+
+        }
+
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #d4dfdb;
+
+            border-radius: 11px;
+
+            background: #f9fbfa;
+
+            color: #082d24;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: .2s;
+
+        }
+
+
+        .form-group textarea {
+
+            min-height: 130px;
+
+            resize: vertical;
+
+            line-height: 1.8;
+
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+
+            border-color: #ff7043;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(255,112,67,.10);
+
+        }
+
+
+        .field-hint {
+
+            color: #89938f;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =========================
+           PUBLISH
+        ========================= */
+
+        .publish-box {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 17px;
+
+            border-radius: 13px;
+
+            background: #eef8f4;
+
+            border: 1px solid #d1e9df;
+
+        }
+
+
+        .publish-box input {
+
+            width: 20px;
+
+            height: 20px;
+
+            accent-color: #159471;
+
+            cursor: pointer;
+
+        }
+
+
+        .publish-text strong {
+
+            display: block;
+
+            margin-bottom: 3px;
+
+        }
+
+
+        .publish-text small {
+
+            color: #687b74;
+
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .form-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 28px;
+
+        }
+
+
+        .save-button {
+
+            padding: 13px 25px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background: #ff7043;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            font-weight: 900;
+
+            transition: .2s;
+
+        }
+
+
+        .save-button:hover {
+
+            background: #f15e32;
+
+            transform: translateY(-2px);
+
+        }
+
+
+        .cancel-button {
+
+            padding: 13px 22px;
+
+            border-radius: 11px;
+
+            background: #edf2f0;
+
+            color: #082d24;
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .form-group.full {
+
+                grid-column: auto;
+
+            }
+
+
+            .form-card {
+
+                padding: 22px;
+
+            }
+
+
+            .nav-container {
+
+                flex-direction: column;
+
+            }
+
+
+            .page-header h1 {
+
+                font-size: 30px;
+
+            }
+
+
+            .form-actions {
+
+                flex-direction: column;
+
+            }
+
+
+            .save-button,
+            .cancel-button {
+
+                width: 100%;
+
+                text-align: center;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+
+        <div>
+
+            <a href="{{ url_for('home') }}"
+               class="brand">
+
+                <span class="brand-icon">
+                    D
+                </span>
+
+                <span class="brand-name notranslate" translate="no">
+                    De<span>Tactica</span>
+                </span>
+
+                <span class="admin-badge">
+                    Admin
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <a href="{{ url_for('admin_exercises') }}"
+           class="back-button">
+
+            العودة لإدارة التمارين
+
+        </a>
+
+
+    </div>
+
+</header>
+
+
+
+<main class="page">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="page-header">
+
+        <span>
+            إدارة المحتوى
+        </span>
+
+        <h1>
+            إضافة تمرين جديد
+        </h1>
+
+        <p>
+            أضف بيانات التمرين، وحدد الفئة والهدف
+            والمستوى. عند تفعيل النشر سيظهر التمرين
+            تلقائيًا في مكتبة المدربين.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================= -->
+
+    {% with messages =
+        get_flashed_messages(
+            with_categories=true
+        )
+    %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =========================
+         FORM
+    ========================= -->
+
+    <form method="POST"
+          class="form-card">
+
+
+        <!-- =========================
+             BASIC INFORMATION
+        ========================= -->
+
+        <section class="form-section">
+
+
+            <h2 class="section-title">
+
+                <span>📝</span>
+
+                البيانات الأساسية
+
+            </h2>
+
+
+            <div class="form-grid">
+
+
+                <!-- TITLE -->
+
+                <div class="form-group full">
+
+                    <label for="title">
+
+                        اسم التمرين
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="مثال: تمرين التمرير والاستحواذ"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- SPORT -->
+
+                <div class="form-group">
+
+                    <label for="sport_id">
+
+                        الرياضة
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <select
+                        id="sport_id"
+                        name="sport_id"
+                        required
+                    >
+
+                        <option value="">
+                            اختر الرياضة
+                        </option>
+
+
+                        {% for sport in sports %}
+
+                            <option value="{{ sport.id }}">
+
+                                {{ sport.icon }}
+                                {{ sport.name_en if current_language == 'en' else sport.name_ar }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        التصنيف
+                    </label>
+
+
+                    <select
+                        id="category"
+                        name="category"
+                    >
+
+                        <option value="">
+                            اختر التصنيف
+                        </option>
+
+                        <option value="مهاري">
+                            مهاري
+                        </option>
+
+                        <option value="تكتيكي">
+                            تكتيكي
+                        </option>
+
+                        <option value="بدني">
+                            بدني
+                        </option>
+
+                        <option value="إحماء">
+                            إحماء
+                        </option>
+
+                        <option value="دفاعي">
+                            دفاعي
+                        </option>
+
+                        <option value="هجومي">
+                            هجومي
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group full">
+
+                    <label for="description">
+
+                        وصف التمرين
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="اشرح فكرة التمرين وطريقة تنفيذه والخطوات المطلوبة..."
+                        required
+                    ></textarea>
+
+
+                    <span class="field-hint">
+
+                        هذا الوصف سيظهر للمدرب
+                        داخل مكتبة التمارين.
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             TRAINING DETAILS
+        ========================= -->
+
+        <section class="form-section">
+
+
+            <h2 class="section-title">
+
+                <span>⚽</span>
+
+                تفاصيل التمرين
+
+            </h2>
+
+
+            <div class="form-grid">
+
+
+                <!-- GOAL -->
+
+                <div class="form-group">
+
+                    <label for="goal">
+                        هدف التمرين
+                    </label>
+
+
+                    <select
+                        id="goal"
+                        name="goal"
+                    >
+
+                        <option value="">
+                            اختر الهدف
+                        </option>
+
+                        <option value="تمرير">
+                            تمرير
+                        </option>
+
+                        <option value="استحواذ">
+                            استحواذ
+                        </option>
+
+                        <option value="تسديد">
+                            تسديد
+                        </option>
+
+                        <option value="مراوغة">
+                            مراوغة
+                        </option>
+
+                        <option value="لياقة">
+                            لياقة
+                        </option>
+
+                        <option value="إحماء">
+                            إحماء
+                        </option>
+
+                        <option value="دفاع">
+                            دفاع
+                        </option>
+
+                        <option value="هجوم">
+                            هجوم
+                        </option>
+
+                        <option value="ضغط">
+                            ضغط
+                        </option>
+
+                        <option value="تحولات">
+                            تحولات
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- LEVEL -->
+
+                <div class="form-group">
+
+                    <label for="level">
+                        المستوى
+                    </label>
+
+
+                    <select
+                        id="level"
+                        name="level"
+                    >
+
+                        <option value="">
+                            اختر المستوى
+                        </option>
+
+                        <option value="مبتدئ">
+                            مبتدئ
+                        </option>
+
+                        <option value="متوسط">
+                            متوسط
+                        </option>
+
+                        <option value="متقدم">
+                            متقدم
+                        </option>
+
+                    </select>
+
+                </div>
+
+<!-- AGE GROUP -->
+
+<div class="form-group">
+
+    <label for="age_group">
+        الفئة العمرية
+    </label>
+
+    <select
+        id="age_group"
+        name="age_group"
+    >
+
+        <option value="">
+            اختر الفئة العمرية
+        </option>
+
+        <option value="Kids">
+            Kids
+        </option>
+
+        <option value="براعم">
+            براعم
+        </option>
+
+        <option value="ناشئين">
+            ناشئين
+        </option>
+
+        <option value="شباب">
+            شباب
+        </option>
+
+        <option value="كبار">
+            كبار
+        </option>
+
+    </select>
+
+</div>
+                <!-- PLAYERS -->
+
+                <div class="form-group">
+
+                    <label for="players_count">
+                        عدد اللاعبين
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="players_count"
+                        name="players_count"
+                        placeholder="مثال: 8 - 12"
+                    >
+
+                </div>
+
+
+                <!-- DURATION -->
+
+                <div class="form-group">
+
+                    <label for="duration_minutes">
+                        مدة التمرين بالدقائق
+                    </label>
+
+
+                    <input
+                        type="number"
+                        id="duration_minutes"
+                        name="duration_minutes"
+                        min="1"
+                        max="300"
+                        placeholder="مثال: 20"
+                    >
+
+                </div>
+
+
+                <!-- EQUIPMENT -->
+
+                <div class="form-group">
+
+                    <label for="equipment">
+                        الأدوات المطلوبة
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="equipment"
+                        name="equipment"
+                        placeholder="كرات، أقماع، حواجز..."
+                    >
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             MEDIA
+        ========================= -->
+
+        <section class="form-section">
+
+
+            <h2 class="section-title">
+
+                <span>🎥</span>
+
+                الصور والفيديو
+
+            </h2>
+
+
+            <div class="form-grid">
+
+
+                <!-- IMAGE -->
+
+                <div class="form-group">
+
+                    <label for="image_filename">
+                        اسم ملف الصورة
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="image_filename"
+                        name="image_filename"
+                        placeholder="مثال: passing-drill.jpg"
+                    >
+
+
+                    <span class="field-hint">
+
+                        يمكن إضافة نظام رفع الصور
+                        لاحقًا. حاليًا يمكن كتابة
+                        اسم الصورة الموجودة في static.
+
+                    </span>
+
+                </div>
+
+
+                <!-- VIDEO -->
+
+                <div class="form-group">
+
+                    <label for="video_url">
+                        رابط فيديو التمرين
+                    </label>
+
+
+                    <input
+                        type="url"
+                        id="video_url"
+                        name="video_url"
+                        placeholder="https://..."
+                    >
+
+
+                    <span class="field-hint">
+
+                        يمكنك وضع رابط فيديو
+                        توضيحي للتمرين.
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             PUBLISH
+        ========================= -->
+
+        <section class="form-section">
+
+
+            <h2 class="section-title">
+
+                <span>🌐</span>
+
+                حالة النشر
+
+            </h2>
+
+
+            <label class="publish-box">
+
+
+                <input
+                    type="checkbox"
+                    name="is_published"
+                    checked
+                >
+
+
+                <span class="publish-text">
+
+                    <strong>
+                        نشر التمرين في المكتبة
+                    </strong>
+
+                    <small>
+
+                        عند تفعيل هذا الخيار سيظهر
+                        التمرين للمستخدمين في مكتبة
+                        التمارين مباشرة بعد الحفظ.
+
+                    </small>
+
+                </span>
+
+
+            </label>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             ACTIONS
+        ========================= -->
+
+        <div class="form-actions">
+
+
+            <a href="{{ url_for('admin_exercises') }}"
+               class="cancel-button">
+
+                إلغاء
+
+            </a>
+
+
+            <button type="submit"
+                    class="save-button">
+
+                + إضافة التمرين ونشره
+
+            </button>
+
+
+        </div>
+
+
+    </form>
+
+
+</main>
+
+
+
+<script>window.DETACTICA_LANGUAGE = {{ current_language|tojson }};</script>
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+
+</html>

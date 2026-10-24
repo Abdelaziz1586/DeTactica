@@ -1,0 +1,7 @@
+Add these Environment Variables in Vercel before/after first deploy:
+
+DATABASE_URL=<your PostgreSQL connection string>
+DETACTICA_SECRET_KEY=<a long random secret>
+DETACTICA_GMAIL_APP_PASSWORD=<your Gmail App Password>
+
+Do not put the real secret values inside this file.
